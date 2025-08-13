@@ -1,0 +1,285 @@
+/* --- 기본 스타일 --- */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* 밝은 회색 배경 */
+    color: #212529; /* 기본 텍스트 색상 */
+}
+
+/* --- 캐러셀 스타일 --- */
+#teamCarousel .carousel-inner {
+    border-radius: 15px;
+}
+
+#teamCarousel .carousel-item img {
+    height: 400px; /* 로고 이미지 높이 축소 */
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+#teamCarousel .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1) grayscale(100) brightness(2); /* 검은색으로 변경 */
+}
+
+/* --- 새로운 하이라이트 섹션 스타일 --- */
+.highlight-section-new {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.video-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px; /* 스크롤바 공간 확보 */
+}
+
+.video-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.video-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.video-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.video-title {
+    padding: 10px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* --- 챔피언 섹션 스타일 --- */
+.champion-section {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+#kiaChampionCarousel .carousel-inner {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#kiaChampionCarousel .carousel-item img {
+    max-height: 400px; /* 캐러셀 이미지 최대 높이 설정 */
+    object-fit: cover; /* 이미지가 컨테이너에 꽉 차도록 설정 */
+}
+
+
+/* --- 새로운 순위 보기 섹션 스타일 --- */
+.standings-section-new {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #002856;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #888;
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+.tab:hover {
+    color: #002856; /* 호버 시 색상 변경 */
+}
+
+.tab.active {
+    color: #002856;
+    border-bottom: 2px solid #002856;
+    margin-bottom: -2px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+}
+
+.date-selector span {
+    cursor: pointer;
+}
+
+.season-selector .form-select {
+    width: auto;
+    min-width: 120px;
+}
+
+/* --- 개인 기록 섹션 스타일 --- */
+.player-records-section {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.player-records-table {
+    width: 100%;
+    font-size: 0.85rem;
+}
+
+.player-records-table th,
+.player-records-table td {
+    padding: 8px 5px;
+    text-align: center;
+}
+
+/* --- 주간 랭킹 섹션 스타일 --- */
+.weekly-ranking-section {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.ranking-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.ranking-name {
+    font-weight: bold;
+}
+
+.ranking-record {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* 순위 테이블 컨테이너 */
+#standingsContainer {
+    margin-top: 20px;
+}
+
+/* --- 순위 테이블 스타일 --- */
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.standings-table th,
+.standings-table td {
+    padding: 10px 8px; /* 패딩을 약간 줄임 */
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.9rem; /* 폰트 크기를 약간 줄임 */
+}
+
+.standings-table th {
+    background-color: #002856; /* KBO 메인 컬러 */
+    color: white;
+    font-weight: bold;
+}
+
+.standings-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* 짝수 행 배경색 */
+}
+
+.standings-table tbody tr:hover {
+    background-color: #e9ecef; /* 마우스 오버 시 배경색 */
+}
+
+/* --- 기존 스타일 유지 (필요 시) --- */
+/* 기존의 다른 스타일들은 여기에 유지될 수 있습니다. */
+/* 예를 들어, 헤더, 푸터, 모달 등의 스타일 */
+
+header {
+    background-color: #002856;
+    color: white;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 70px;
+    height: auto;
+    margin-right: 15px;
+}
+
+.header-container h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    margin-top: 20px;
+    text-align: center;
+}
