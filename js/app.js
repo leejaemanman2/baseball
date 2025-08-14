@@ -1,7 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 페이지 로드 시 순위표와 개인 기록을 바로 표시
-    displayStandings();
-    initializePlayerRecords();
+    if (document.getElementById('standingsContainer')) {
+        displayStandings();
+        initializePlayerRecords();
+    }
+
+    // 용어 사전 페이지 기능 초기화
+    if (document.querySelector('.dictionary-content')) {
+        initializeDictionaryNav();
+        initializeSearch();
+    }
 });
 
 function displayStandings() {
@@ -130,4 +138,70 @@ function initializePlayerRecords() {
             displayPlayerRecords(event.target.value);
         });
     }
+}
+
+// --- 용어 사전 GNB 스크롤 스파이 기능 ---
+function initializeDictionaryNav() {
+    const gnbLinks = document.querySelectorAll('#sidebar .nav-link');
+    const sections = document.querySelectorAll('.dictionary-content section');
+    const offset = 70; // 상단 네비게이션 바 높이를 고려한 오프셋
+
+    function changeLinkState() {
+        let current = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - offset) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        gnbLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // 페이지 로드 시 및 스크롤 시 함수 실행
+    changeLinkState();
+    window.addEventListener('scroll', changeLinkState);
+}
+
+// --- 용어 사전 검색 기능 ---
+function initializeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('keyup', () => {
+        const filter = searchInput.value.toUpperCase();
+        const sections = document.querySelectorAll('.dictionary-content section');
+
+        sections.forEach(section => {
+            const terms = section.querySelectorAll('dl > dt');
+            let sectionHasVisibleTerm = false;
+
+            terms.forEach(term => {
+                const termText = term.textContent || term.innerText;
+                const definition = term.nextElementSibling;
+
+                if (termText.toUpperCase().indexOf(filter) > -1) {
+                    term.style.display = "";
+                    definition.style.display = "";
+                    sectionHasVisibleTerm = true;
+                } else {
+                    term.style.display = "none";
+                    definition.style.display = "none";
+                }
+            });
+
+            // 검색 결과가 있는 섹션만 표시
+            if (sectionHasVisibleTerm) {
+                section.style.display = "";
+            } else {
+                section.style.display = "none";
+            }
+        });
+    });
 }
