@@ -432,10 +432,32 @@
                 background: rgba(49, 82, 136, .18)
             }
         }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #overlay {
+            position: fixed;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        #player {
+            display: none;
+        }
     </style>
+    <script src="https://www.youtube.com/iframe_api"></script>
+
 </head>
 
 <body>
+    <div id="overlay"></div>
+    <div id="player"></div>
+
     <!-- 좌측 리모컨 -->
     <nav class="side-remote" id="remote"></nav>
 
@@ -460,6 +482,46 @@
     </div>
 
     <script>
+        let playerStarted = false;
+        let readyToPlay = false;
+
+        function onYouTubeIframeAPIReady() {
+            window.ytPlayer = new YT.Player('player', {
+                height: '0',
+                width: '0',
+                videoId: '9Hi4LtO01oU',
+                playerVars: {
+                    autoplay: 1,
+                    loop: 1,
+                    playlist: '9Hi4LtO01oU',
+                    // mute 옵션은 playerVars에 없음
+                },
+                events: {
+                    onReady: (event) => {
+                        console.log('플레이어 준비 완료');
+                        event.target.mute();  // 음소거 초기 설정
+                        readyToPlay = true;
+                    }
+                }
+            });
+        }
+        function playMusicOnce() {
+            if (!readyToPlay) {
+                console.log('플레이어 준비 중이라 재생 대기');
+                return;
+            }
+
+            if (window.ytPlayer && !playerStarted) {
+                window.ytPlayer.unMute();
+                window.ytPlayer.playVideo();
+                playerStarted = true;
+                console.log('음악 재생 시작');
+            }
+        }
+
+        document.getElementById('overlay').addEventListener('click', playMusicOnce);
+        // window.addEventListener('scroll', playMusicOnce, { once: true });
+
         /* ---------- 팀 데이터 (사용자 제공값 그대로) ---------- */
         const team = {
             name: "NC 다이노스", slogan: "Light Now!", founded: 2011, home: "창원시",
