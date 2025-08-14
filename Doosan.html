@@ -28,7 +28,6 @@
             /* 로고는 그대로(색만 변경 요청이었음) */
         }
 
-
         * {
             box-sizing: border-box
         }
@@ -395,9 +394,7 @@
 
         /* 히어로 배경에 남은 버건디 기운(#1a1216) 제거 + 딥레드 비율 살짝 */
         .hero {
-            background: linear-gradient(90deg,
-                    color-mix(in srgb, var(--accent-2) 22%, #0C1424),
-                    #0C1424 55%);
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent-2) 22%, #0C1424), #0C1424 55%);
             border: 1px solid color-mix(in srgb, var(--accent-2) 40%, #000);
         }
 
@@ -409,15 +406,12 @@
         /* 리모컨 active/포커스의 레드 하이라이트 강화 */
         .remote-item.active {
             border-color: color-mix(in srgb, var(--accent) 45%, var(--accent-d));
-            box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 55%, transparent);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 55%, transparent);
         }
 
         /* 배지(가격/등번호)의 골드/버건디 → 레드 하이라이트 */
         .badge {
-            background: linear-gradient(45deg,
-                    var(--accent-2),
-                    color-mix(in srgb, var(--accent-2) 70%, #ffffff));
+            background: linear-gradient(45deg, var(--accent-2), color-mix(in srgb, var(--accent-2) 70%, #ffffff));
             color: #111;
         }
 
@@ -441,8 +435,7 @@
 
         /* 리모컨/버튼의 은은한 버건디 톤 제거(네이비 베이스 유지) */
         .remote-header {
-            background: linear-gradient(90deg,
-                    color-mix(in srgb, var(--accent) 35%, #0F1422), #0F1422 55%);
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 35%, #0F1422), #0F1422 55%);
         }
 
         .remote-item {
@@ -490,9 +483,9 @@
             <p id="hero-sub">함께 더 높게 · 서울 고척 · 2008</p>
         </section>
 
-        <!-- 섹션들 -->
+        <!-- 섹션들 (응원가 제거) -->
         <section id="sec-overview" class="section card"></section>
-        <section id="sec-anthem" class="section card"></section>
+        <!-- <section id="sec-anthem" class="section card"></section> -->
         <section id="sec-players" class="section card"></section>
         <section id="sec-food" class="section card"></section>
         <section id="sec-stand" class="section card"></section>
@@ -524,7 +517,7 @@
                 { name: "김재환", pos: "외야수", img: "https://i.namu.wiki/i/IDZvTcQC4bNVdEKmyDe768kakQ5kB7uL2_DEM7-iVfnnOtmGjxPXiXaQB1sNDRNYRecZoTXRzP2nBfp7Ebx-5JHKyTTF56hMyjlwfLn6bdKu5QAoXJWFD9JUTrJVGmss3JC9dbzuFJtS-cxfy_7phQ.webp", number: 32 },
                 { name: "김인태", pos: "외야수", img: "https://i.namu.wiki/i/C1p_E5ikOhLRzLX7I63aomzXbIojsjUpaiwByyUzkEMNZCVU1hYKtBxSu00zibUVqsuaUb6x4nfNiekFFUGoS0rnM64na0gAqRREKSI2ukK_w3g2ueQlcZesvgNGR4MXLQcb6V7EEwtrX6F4QbtQJQ.webp", number: 39 },
                 { name: "김대한", pos: "외야수", img: "https://i.namu.wiki/i/oIlnzlmjdeK6n0KkJIl3cJwH7ugiLz9M-J24sCfvfYG499A1lzbEvu03HTMm7qUuEzu4sGzvhGCNpbZVvPlfCQ.webp", number: 65 },
-                { name: "조수행", pos: "외야수", img: "data:image/jpeg;base64,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", number: 51 },
+                { name: "조수행", pos: "외야수", img: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD... (생략) ..." },
                 { name: "곽빈", pos: "투수", img: "https://i.namu.wiki/i/fn-D-pUR3smU5DQ7deMN-5d2PcUqRYIExnnbnkbEa0P9eqe8wgZ0U2taJZLNlZbmaRJ7i22BauXt11bULk1vy9rwLj8E56JhToKONHE4BD9UNxaja3BvmcoFB_4ig71_d-AgfzKONfy2aDQVe5zz7A.webp", number: 38 },
                 { name: "홍건희", pos: "투수", img: "https://i.namu.wiki/i/yzAiN0VtdA5XMCbxJDZW4XguzDVwTu9STFpWqRBCmW8PAjOuFHFz7YXNypj4kqjcso5mUtYaoxFLFcRThb_KXM4_xOsjDbOJ38M-Nm3gGfXxNcx0ewSpPCZV_F65s-uk05GjifJHEIjfHBVy05GCbA.webp", number: 61 },
                 { name: "김강률", pos: "투수", img: "https://i.namu.wiki/i/yb_iISAtaVZvGZkegHKDpljUKehMtcQgFz_WnaZC7Ax4SjaDgMo9E45Ig8Wrvg74LDNAJJt3eOAxkOO7halfTA.webp", number: 19 },
@@ -594,10 +587,10 @@
 
         function renderRemote() {
             const nav = document.getElementById('remote');
-            const ICON = { 'sec-overview': '🏠', 'sec-anthem': '🎵', 'sec-players': '👥', 'sec-food': '🍜', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-map': '🗺️' };
-            const LABEL = id => ({ 'sec-overview': '개요', 'sec-anthem': '응원가', 'sec-players': '선수', 'sec-food': '맛집', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-map': '지도' }[id] || id);
+            const ICON = { 'sec-overview': '🏠', 'sec-players': '👥', 'sec-food': '🍜', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-map': '🗺️' };
+            const LABEL = id => ({ 'sec-overview': '개요', 'sec-players': '선수', 'sec-food': '맛집', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-map': '지도' }[id] || id);
             const groups = [
-                { title: '정보', items: ['sec-overview', 'sec-anthem', 'sec-players', 'sec-food'] },
+                { title: '정보', items: ['sec-overview', 'sec-players', 'sec-food'] }, // ← 응원가 제거
                 { title: '기록', items: ['sec-stand', 'sec-stats'] },
                 { title: '기타', items: ['sec-goods', 'sec-map'] },
             ];
@@ -650,15 +643,11 @@
           <div class="card" style="padding:14px"><div class="muted">창단</div><div>${team.founded}</div></div>
           <div class="card" style="padding:14px"><div class="muted">구장</div><div>${team.stadium.name}</div></div>
           <div class="card" style="padding:14px"><div class="muted">슬로건</div><div>${team.slogan}</div></div>
-        </div>
-        
         </div>`;
         }
-        function renderAnthem() {
-            document.getElementById('sec-anthem').innerHTML = `
-        <h2>응원가</h2>
-        <div class="media card"><iframe src="${team.anthem.youtube}" title="응원가" loading="lazy"></iframe></div>`;
-        }
+
+        /* renderAnthem() 제거 */
+
         function renderPlayers() {
             const host = document.getElementById('sec-players');
             host.innerHTML = `<h2>선수 프로필</h2>
@@ -741,7 +730,7 @@
         renderHeader();
         renderRemote();
         renderOverview();
-        renderAnthem();
+        /* renderAnthem();  // ← 호출 제거 */
         renderPlayers();
         renderFoods();
         renderStandings();

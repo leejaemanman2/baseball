@@ -9,23 +9,15 @@
         :root {
             --bg: #0b0c10;
             --panel: #171419;
-            /* 패널 살짝 버건디 기운 */
             --text: #e6e8ec;
             --muted: #9aa3af;
-
-            /* ▶ 키움 컨셉 컬러 (일관 적용) */
             --accent: #5B2A33;
-            /* 메인 버건디 */
             --accent-2: #D4AF37;
-            /* 포인트 골드 */
             --accent-d: #4A2029;
-            /* 딥 버건디(hover/line) */
-
             --radius: 16px;
             --shadow: 0 10px 30px rgba(0, 0, 0, .25);
             --remote-w: 220px;
             --wm-url: url('키움로고.jpg');
-            /* 워터마크/로고 경로(원하면 변경) */
         }
 
         * {
@@ -45,8 +37,7 @@
             margin: 0;
             font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Malgun Gothic;
             color: var(--text);
-            /* ▶ 버건디 톤 배경 그라디언트 */
-            background: linear-gradient(180deg, #1B1418 0%, #281A20 50%, #1B1418 100%);
+            background: linear-gradient(180deg, #1B1418 0%, #281A20 50%, #1B1418 100%)
         }
 
         a {
@@ -58,7 +49,7 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 0;
+            z-index: 0
         }
 
         .container {
@@ -67,7 +58,7 @@
             padding: 24px;
             position: relative;
             z-index: 1;
-            padding-left: calc(var(--remote-w) + 24px);
+            padding-left: calc(var(--remote-w) + 24px)
         }
 
         .container::before {
@@ -78,19 +69,17 @@
             height: 4px;
             background: linear-gradient(90deg, var(--accent-2), var(--accent));
             border-radius: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 10px
         }
 
-        /* 카드/배너 */
         .card,
         header.card,
         .hero {
             border: 1px solid var(--accent-d);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow)
         }
 
-        /* 헤더 */
         header.card {
             display: flex;
             align-items: center;
@@ -117,14 +106,14 @@
             font-size: 14px
         }
 
-        /* 히어로 */
         .hero {
             position: relative;
             overflow: hidden;
             padding: 28px 22px;
             margin: 16px 0;
+            /* ↓ color-mix 문법 공백 보정: var(--accent) 50% */
             background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, #1a1216), #1a1216 55%);
-            border: 1px solid color-mix(in srgb, var(--accent) 50%, #000);
+            border: 1px solid color-mix(in srgb, var(--accent) 50%, #000)
         }
 
         .hero h2 {
@@ -152,7 +141,7 @@
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
             backdrop-filter: blur(6px);
-            z-index: 1000;
+            z-index: 1000
         }
 
         .side-remote .remote-header {
@@ -162,7 +151,7 @@
             padding: 12px 12px;
             background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 35%, #141018), #141018 55%);
             border-bottom: 1px solid var(--accent-d);
-            border-radius: 16px 16px 0 0;
+            border-radius: 16px 16px 0 0
         }
 
         .remote-header img {
@@ -190,7 +179,7 @@
 
         .side-remote .remote-list {
             padding: 8px 8px 12px;
-            overflow: auto;
+            overflow: auto
         }
 
         .remote-group {
@@ -198,7 +187,7 @@
             font-size: 11px;
             color: var(--muted);
             letter-spacing: .04em;
-            text-transform: uppercase;
+            text-transform: uppercase
         }
 
         .remote-item {
@@ -212,7 +201,7 @@
             cursor: pointer;
             border: 1px solid transparent;
             background: #141018;
-            color: var(--text);
+            color: var(--text)
         }
 
         .remote-item .ico {
@@ -223,7 +212,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 15px
         }
 
         .remote-item .label {
@@ -233,19 +222,19 @@
 
         .remote-item:hover {
             border-color: var(--accent-d);
-            background: #191117;
+            background: #191117
         }
 
         .remote-item.active {
             background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 28%, transparent), transparent);
             border-color: color-mix(in srgb, var(--accent) 45%, var(--accent-d));
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 35%, transparent);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 35%, transparent)
         }
 
         .remote-footer {
             margin-top: auto;
             padding: 10px 12px;
-            border-top: 1px solid var(--accent-d);
+            border-top: 1px solid var(--accent-d)
         }
 
         .remote-footer a {
@@ -257,23 +246,13 @@
             border: 1px solid var(--accent-d);
             border-radius: 12px;
             padding: 10px 12px;
-            font-weight: 700;
+            font-weight: 700
         }
 
         .remote-footer a:hover {
             background: var(--accent-2);
             border-color: transparent;
-            color: #111;
-        }
-
-        .remote-footer .ico {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            background: #1C1520;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: #111
         }
 
         /* 섹션 공통 */
@@ -288,7 +267,7 @@
         }
 
         .section {
-            scroll-margin-top: 14px;
+            scroll-margin-top: 14px
         }
 
         .section.card {
@@ -308,7 +287,6 @@
             background: #24171C
         }
 
-        /* 버건디 딥 헤더 */
         th,
         td {
             font-size: 14px;
@@ -404,9 +382,9 @@
             <p id="hero-sub">함께 더 높게 · 서울 고척 · 2008</p>
         </section>
 
-        <!-- 섹션들 -->
+        <!-- 섹션들 (응원가 제거) -->
         <section id="sec-overview" class="section card"></section>
-        <section id="sec-anthem" class="section card"></section>
+        <!-- <section id="sec-anthem" class="section card"></section> -->
         <section id="sec-players" class="section card"></section>
         <section id="sec-food" class="section card"></section>
         <section id="sec-stand" class="section card"></section>
@@ -416,17 +394,18 @@
     </div>
 
     <script>
-        /* ---------- 팀 데이터 ---------- */
+        /* ---------- 팀 데이터 (복구) ---------- */
         const team = {
             name: "키움 히어로즈",
             slogan: "함께 더 높게",
             founded: 2008,
             home: "서울 고척",
-            colors: { accent: "#5B2A33", accent2: "#D4AF37" }, // 버건디 + 골드 (root와 통일)
+            colors: { accent: "#5B2A33", accent2: "#D4AF37" }, // 버건디 + 골드
             logo: "https://i.namu.wiki/i/ZlB0IEFdKgSEsYEfHEqiwNzOnaxG6dQzbc5pHM7RzKWCzBbB6AdyWeB_GDV3FCf7jAzju0b-vWO6mF_Fk6gyfDTAHvBnxXY0Qtk-8DN64wLB__pFX45PaUwwjsGQ9g1zXby4NnTR5Y7eNs6TQf1gsA.svg",
             links: { home: "https://www.heroesbaseball.co.kr" },
             stadium: { name: "고척스카이돔", mapQuery: "고척스카이돔" },
-            anthem: { youtube: "https://www.youtube.com/embed/S2cCk1rI2mI?rel=0" }, // 원하면 교체
+            anthem: { youtube: "https://www.youtube.com/embed/S2cCk1rI2mI?rel=0" }, // 데이터만 유지(렌더 안 함)
+
             players: [
                 { name: "홍원기", pos: "감독", img: "https://i.namu.wiki/i/MxNOwMCur-xTWGwy3Uw5DOQVan1zjCs8XoA-RKLGg0YA3Q34LnKZr2XP_pXx9hlucLYHNRd-LH0DuwZyNmu5_AqadSmPzNp0RjiinJWCGPWi9Wnotcgnbo8L7XFpg4lT6IjtusaFCxQn8We5zwvVuQ.webp", number: 78 },
                 { name: "최주환", pos: "내야수", img: "https://i.namu.wiki/i/Z4TQde2_c5D0OyELN_8DS6itW0eJOy9LhVjfS_DU__VL8k606PJILGe1oEnCdvcxG8GlGL3h86Emlz1P0O1NwnWxMiUmw_XALUNMObenwIQkVKgFMJuRp78nhbLmPivzRfsP5l3dXWE2LHpLaEbDGQ.webp", number: 53 },
@@ -441,11 +420,13 @@
                 { name: "김윤하", pos: "투수", img: "https://i.namu.wiki/i/39xmOagUJTCaW62quo6pwEigm26bUqB40IKqt-fz9j8VgIfxqZ1TsyTFMe_LpeWmn2003nNX_iWB_J52Y6oKriSH2iLc_71H92hD_2jl1aECMfmMJVkyffsfI-ROoab_PeP2phGhFgSolBLCIQHgbw.webp", number: 19 },
                 { name: "정현우", pos: "투수", img: "https://i.namu.wiki/i/TbftJCRMJdVooIWlO2aVQ3f9jO-W3_BsYkk81rFOJBQewpGBU9F-iXIIg_MI4nQN3gBWYTeC4zXOnU3SLzWJAYTd6fUwG-Sn23N796HsKqG9YIF9NA3Qhu7oxvf_1GlbJdpayHIwVIhyotPC0Vqdzg.webp", number: 13 },
             ],
+
             foods: [
                 { name: "구두레돌솥쌈밥", type: "한식", link: "https://www.google.com/maps/search/%EA%B5%AC%EB%91%90%EB%A0%88%EB%8F%8C%EC%86%A5%EC%8C%88%EB%B0%A5%20%EA%B3%A0%EC%B2%99" },
                 { name: "난연스시", type: "초밥", link: "https://www.google.com/maps/search/%EB%82%9C%EC%97%B0%EC%8A%A4%EC%8B%9C%20%EA%B3%A0%EC%B2%99" },
                 { name: "고척동 이태리", type: "양식", link: "https://www.google.com/maps/search/%EA%B3%A0%EC%B2%99%EB%8F%99%20%EC%9D%B4%ED%83%9C%EB%A6%AC" },
             ],
+
             standings: [
                 { rank: 1, team: "LG", w: 66, l: 42, pct: .611 },
                 { rank: 2, team: "한화", w: 62, l: 42, pct: .596 },
@@ -458,6 +439,7 @@
                 { rank: 9, team: "두산", w: 45, l: 59, pct: .433 },
                 { rank: 10, team: "키움", w: 33, l: 74, pct: .308 },
             ],
+
             stats: {
                 hitters: [
                     { rank: 1, name: "송성문", team: "키움", avg: .303, hr: 19, rbi: 63 },
@@ -470,6 +452,7 @@
                     { rank: 3, name: "주승우", team: "키움", era: 2.45, so: 35, w: 2 },
                 ]
             },
+
             goods: [
                 { name: "홈 유니폼", price: "₩119,000", img: "https://cafe24img.poxo.com/ticketmdshop/web/product/big/20250403/03694f9c35fcdea39644103b07d3add0.jpg" },
                 { name: "볼캡", price: "₩35,000", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgOd3MthqId3blKVGTkwHixsTFqvWlCM2r9Q&s" },
@@ -487,27 +470,24 @@
             document.documentElement.style.setProperty('--wm-url', `url('${team.logo || "키움로고.png"}')`);
         }
         function renderHeader() {
-            // 헤더 로고/텍스트 세팅
             document.querySelector('#team-logo').src = team.logo;
             document.querySelector('#team-name').textContent = team.name;
             document.querySelector('#team-sub').textContent = `${team.slogan} · ${team.founded} · ${team.home}`;
-            // 히어로 텍스트 세팅
             document.getElementById('hero-title').textContent = team.name;
             document.getElementById('hero-sub').textContent = `${team.slogan} · ${team.home} · ${team.founded}`;
         }
         function scrollToSection(id) {
-            const target = document.getElementById(id);
-            if (!target) return;
+            const target = document.getElementById(id); if (!target) return;
             const y = target.getBoundingClientRect().top + window.scrollY - 10;
             window.scrollTo({ top: y, behavior: 'smooth' });
         }
 
         function renderRemote() {
             const nav = document.getElementById('remote');
-            const ICON = { 'sec-overview': '🏠', 'sec-anthem': '🎵', 'sec-players': '👥', 'sec-food': '🍜', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-map': '🗺️' };
-            const LABEL = id => ({ 'sec-overview': '개요', 'sec-anthem': '응원가', 'sec-players': '선수', 'sec-food': '맛집', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-map': '지도' }[id] || id);
+            const ICON = { 'sec-overview': '🏠', 'sec-players': '👥', 'sec-food': '🍜', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-map': '🗺️' };
+            const LABEL = id => ({ 'sec-overview': '개요', 'sec-players': '선수', 'sec-food': '맛집', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-map': '지도' }[id] || id);
             const groups = [
-                { title: '정보', items: ['sec-overview', 'sec-anthem', 'sec-players', 'sec-food'] },
+                { title: '정보', items: ['sec-overview', 'sec-players', 'sec-food'] }, // 응원가 제거
                 { title: '기록', items: ['sec-stand', 'sec-stats'] },
                 { title: '기타', items: ['sec-goods', 'sec-map'] },
             ];
@@ -560,15 +540,10 @@
           <div class="card" style="padding:14px"><div class="muted">창단</div><div>${team.founded}</div></div>
           <div class="card" style="padding:14px"><div class="muted">구장</div><div>${team.stadium.name}</div></div>
           <div class="card" style="padding:14px"><div class="muted">슬로건</div><div>${team.slogan}</div></div>
-        </div>
-        
         </div>`;
         }
-        function renderAnthem() {
-            document.getElementById('sec-anthem').innerHTML = `
-        <h2>응원가</h2>
-        <div class="media card"><iframe src="${team.anthem.youtube}" title="응원가" loading="lazy"></iframe></div>`;
-        }
+        /* renderAnthem() 없음 */
+
         function renderPlayers() {
             const host = document.getElementById('sec-players');
             host.innerHTML = `<h2>선수 프로필</h2>
@@ -651,7 +626,7 @@
         renderHeader();
         renderRemote();
         renderOverview();
-        renderAnthem();
+        /* renderAnthem();  // 호출 없음 */
         renderPlayers();
         renderFoods();
         renderStandings();
