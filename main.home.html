@@ -161,11 +161,52 @@
             outline: 2px solid #333;
             outline-offset: 4px;
         }
+
+        /* === 우상단 용어 사전 버튼 === */
+        .dictionary-fab {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1000;
+        }
+
+        .dictionary-fab a {
+            display: block;
+            width: 150px; /* 너비 조정 */
+            height: auto;
+        }
+
+        .dictionary-fab img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            background: transparent; /* 배경 투명 */
+            padding: 8px;
+            border-radius: 12px;
+            transition: transform .2s ease;
+        }
+
+        .dictionary-fab a:hover img,
+        .dictionary-fab a:focus-visible img {
+            transform: scale(1.04);
+        }
+
+        .dictionary-fab a:focus-visible {
+            outline: 2px solid #333;
+            outline-offset: 4px;
+        }
     </style>
     <!-- ▲▲ 3-UP 로고 슬라이더 전용 CSS 끝 ▲▲ -->
 </head>
 
 <body>
+    <!-- 오른쪽 상단: 용어 사전 이동 버튼 -->
+    <div class="dictionary-fab">
+        <a href="dictionary.html" aria-label="용어 사전으로 이동" title="용어 사전으로 이동">
+            <img src="https://i.namu.wiki/i/rz138i6CeWO4-3JKUJ7glQpWRSk0P7JTbC6KaRmmBItim1yXaXnVgBlIyI03tlN5SxZ3kalOK9SfXaEtV2MDzg.svg" alt="용어 사전" />
+        </a>
+    </div>
     <div class="container mt-5">
         <h1 class="text-center mb-4">KBO 리그 구단</h1>
 
