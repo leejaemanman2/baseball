@@ -6,6 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>구단 상세 | KIA 타이거즈</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         :root {
             --bg: #0b0c10;
@@ -54,7 +58,19 @@
         }
 
         a {
-            color: inherit
+            color: inherit;
+            text-decoration: none;
+
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 12px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px
         }
 
         /* 워터마크(배경 그라디언트와 별개) */
@@ -91,44 +107,6 @@
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
             border-radius: 12px;
             margin-bottom: 10px
-        }
-
-        .card,
-        .hero {
-            border: 1px solid #22252b;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow)
-        }
-
-        .hero {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            overflow: hidden;
-            padding: 40px 22px;
-            margin: 16px 0;
-            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, #0f1117), #0f1117 60%)
-        }
-
-        .hero .logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 12px;
-            object-fit: contain;
-            background: #000;
-            flex: 0 0 auto
-        }
-
-        .hero .title h1 {
-            margin: 0;
-            font-size: 24px
-        }
-
-        .hero .title p {
-            margin: 4px 0 0;
-            color: var(--muted);
-            font-size: 14px
         }
 
         /* 좌측 리모컨 */
@@ -314,6 +292,52 @@
             }
         }
 
+        .hero,
+        .card {
+            border: 1px solid #22252b;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-top: 12px;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 40px 22px;
+            margin: 16px 0;
+            background:
+                linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, transparent), transparent 60%),
+                color-mix(in srgb, var(--panel) 78%, transparent);
+            backdrop-filter: blur(2px);
+        }
+
+        .card {
+            padding: 18px;
+            background: color-mix(in srgb, var(--panel) 78%, transparent);
+            backdrop-filter: blur(2px);
+        }
+
+        .hero .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: contain;
+            background: #000;
+            flex: 0 0 auto
+        }
+
+        .hero .title h1 {
+            margin: 0;
+            font-size: 24px
+        }
+
+        .hero .title p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
         /* 섹션/테이블 */
         h2 {
             font-size: 18px;
@@ -329,32 +353,32 @@
             scroll-margin-top: 14px
         }
 
-        .section.card {
-            padding: 18px;
-            margin-top: 12px
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            overflow: hidden;
-            border-radius: 12px
         }
 
-        thead {
-            background: #0f1320
-        }
-
-        th,
-        td {
+        table th,
+        table td {
             font-size: 14px;
             padding: 10px 12px;
+            color: var(--text) !important;
+            background-color: transparent !important;
             border-bottom: 1px solid #232630;
-            text-align: left
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        table td:nth-child(2) {
+            text-align: left;
+        }
+
+        table thead {
+            background-color: #0f1320;
         }
 
         tbody tr:hover {
-            background: #0e1017
+            background: #0e1017;
         }
 
         .cards {
@@ -399,20 +423,31 @@
             font-size: 12px
         }
 
+        .pill:hover {
+            color: var(--text);
+            border-color: var(--muted);
+        }
+
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px
         }
 
+        .grid-2 .card {
+            padding: 14px;
+            margin-top: 0;
+        }
+
         .media {
-            position: relative;
-            overflow: hidden;
+            padding: 0;
+            background: #000;
             border-radius: 12px;
-            background: #000
         }
 
         .media iframe {
+            display: block;
             width: 100%;
             height: 360px;
             border: 0
@@ -452,6 +487,19 @@
 
         #player {
             display: none;
+        }
+
+        @supports not (background: color-mix(in srgb, red 10%, transparent)) {
+
+            .hero,
+            .card {
+                background: rgba(21, 23, 28, .78);
+            }
+
+            .hero {
+                background:
+                    linear-gradient(90deg, rgba(192, 0, 0, .18), rgba(0, 0, 0, 0) 60%), rgba(21, 23, 28, .78);
+            }
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -493,11 +541,11 @@
             window.ytPlayer = new YT.Player('player', {
                 height: '0',
                 width: '0',
-                videoId: 'iTPWsq1msBU',
+                videoId: 'ssWocIQL51c',
                 playerVars: {
                     autoplay: 1,
                     loop: 1,
-                    playlist: 'iTPWsq1msBU',
+                    playlist: 'ssWocIQL51c',
                     // mute 옵션은 playerVars에 없음
                 },
                 events: {
@@ -543,6 +591,8 @@
 
                 { name: "네일", number: 40, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_40_A.png" },
                 { name: "전상현", number: 51, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_51_A.png" },
+                { name: "김경묵", number: 18, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_018_A.png" },
+                { name: "성영탁", number: 65, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_039_A.png" },
 
                 { name: "김태군", number: 42, pos: "포수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_42_A.png" },
 
@@ -690,32 +740,60 @@
         </div>`;
         }
 
+        /* 선수 캐러셀(유지) */
         function renderPlayers() {
-            document.getElementById('sec-players').innerHTML = `
-        <h2>선수 프로필</h2>
-        <div class="cards">
-          ${team.players.map(p => `
+            const host = document.getElementById('sec-players');
+            const players = team.players;
+            const chunkSize = 4;
+            const numChunks = Math.ceil(players.length / chunkSize);
+
+            let indicatorsHtml = '';
+            for (let i = 0; i < numChunks; i++) {
+                indicatorsHtml += `<button type="button" data-bs-target="#playerCarousel" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></button>`;
+            }
+
+            let slidesHtml = '';
+            for (let i = 0; i < players.length; i += chunkSize) {
+                const chunk = players.slice(i, i + chunkSize);
+                const isActive = i === 0 ? 'active' : '';
+                slidesHtml += `<div class="carousel-item ${isActive}"><div class="row g-3">`;
+                slidesHtml += chunk.map(p => `
+          <div class="col">
             <div class="card item">
               <img src="${p.img}" alt="${p.name}" />
               <div class="meta">
                 <div><div style="font-weight:700">${p.name}</div><div class="muted">${p.pos}</div></div>
                 <span class="badge">${p.number}</span>
               </div>
-            </div>`).join('')}
+            </div>
+          </div>
+        `).join('');
+                slidesHtml += `</div></div>`;
+            }
+
+            host.innerHTML = `
+        <h2>선수 프로필</h2>
+        <div id="playerCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">${indicatorsHtml}</div>
+          <div class="carousel-inner">${slidesHtml}</div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#playerCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+          <button class="carousel-control-next" type="button" data-bs-target="#playerCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
         </div>`;
         }
 
         function renderStandings() {
-            const rows = team.standings.map(s => `
-        <tr class="${s.team === team.abbr ? 'hl-team' : ''}">
-          <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
-        </tr>`).join('');
-            document.getElementById('sec-stand').innerHTML = `
-        <h2>구단 순위</h2>
-        <table class="card standings">
-          <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+            const key = team.name.split(' ')[0]; // "한화" 같이 팀명의 첫 단어로 매칭
+            document.getElementById('sec-stand').innerHTML =
+                `<h2>구단 순위</h2>
+         <table class="standings">
+           <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
+           <tbody>
+             ${team.standings.map(s => `
+               <tr class="${(s.team === team.name || s.team.includes(key)) ? 'hl-team' : ''}">
+                 <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
+               </tr>`).join('')}
+           </tbody>
+         </table>`;
         }
 
         function renderStats() {
@@ -752,12 +830,24 @@
         }
 
         function renderFoods() {
-            document.getElementById('sec-food').innerHTML = `
-        <h2>주변 맛집</h2>
-        <table class="card">
-          <thead><tr><th>상호</th><th>종류</th><th>링크</th></tr></thead>
-          <tbody>${team.foods.map(r => `<tr><td>${r.name}</td><td>${r.type}</td><td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td></tr>`).join('')}</tbody>
-        </table>`;
+            document.getElementById('sec-food').innerHTML =
+                `<h2>주변 맛집</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>상호</th>
+                <th>종류</th>
+                <th>링크</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${team.foods.map(r => `<tr>
+                <td>${r.name}</td>
+                <td>${r.type}</td>
+                <td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td>
+            </tr>`).join('')}
+        </tbody>
+    </table>`;
         }
 
         function renderMap() {
