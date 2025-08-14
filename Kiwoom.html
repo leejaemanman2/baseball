@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 
-    
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,7 +50,13 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 0
+            z-index: 0;
+            background:
+                radial-gradient(1100px 520px at 18% -12%, rgba(255, 255, 255, .06), transparent 70%),
+                radial-gradient(900px 520px at 85% 112%, rgba(255, 255, 255, .04), transparent 70%),
+                var(--wm-url) no-repeat center 55%;
+            background-size: clamp(420px, 30vw, 500px) auto;
+            opacity: .10;
         }
 
         .container {
@@ -532,7 +538,7 @@
         function setTheme() {
             if (team.colors?.accent) document.documentElement.style.setProperty('--accent', team.colors.accent);
             if (team.colors?.accent2) document.documentElement.style.setProperty('--accent-2', team.colors.accent2);
-            document.documentElement.style.setProperty('--wm-url', `url('${team.logo || "키움로고.png"}')`);
+            document.documentElement.style.setProperty('--wm-url', `url('${team.logo}')`);
         }
         function renderHeader() {
             document.querySelector('#team-logo').src = team.logo;
@@ -704,4 +710,3 @@
 </body>
 
 </html>
-
