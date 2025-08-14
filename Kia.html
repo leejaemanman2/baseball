@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>구단 상세 | KIA 타이거즈</title>
+    <style>
+        :root {
+            --bg: #0b0c10;
+            --panel: #15171c;
+            --text: #e6e8ec;
+            --muted: #9aa3af;
+            --accent: #EA0029;
+            --accent-2: #ff7a7a;
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            --remote-w: clamp(180px, 22vw, 240px);
+            --wm-url: url('https://i.namu.wiki/i/eQWnlHuotHNoTmiqIOnC5HQI_5WHrUwcucuZHUs3JW4EWYbZgEtQ-rXK2NDcGjbZB8vJ_RAz3f-IvnMqe0gR3wL-uciVgUP23wZTXYZbPBCcHS30qF4YpdeqeVLIOiLc_XRhqYTLYAZAIYlZ94zZiw.svg');
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Malgun Gothic;
+            color: var(--text);
+            /* 전체 배경: 이미지 없이 그라디언트만 */
+            background: linear-gradient(180deg, #0b0c10 0%,
+                    color-mix(in srgb, var(--accent) 8%, #0d1117) 35%,
+                    #0d1117 55%,
+                    color-mix(in srgb, var(--accent) 8%, #0b0c10) 100%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        @supports not (background:color-mix(in srgb, red 10%, black)) {
+            body {
+                background: linear-gradient(180deg, #0b0c10 0%, #11151c 35%, #0d1117 55%, #0b0c10 100%)
+            }
+        }
+
+        a {
+            color: inherit
+        }
+
+        /* 워터마크(배경 그라디언트와 별개) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(1100px 520px at 18% -12%, rgba(255, 255, 255, .06), transparent 70%),
+                radial-gradient(900px 520px at 85% 112%, rgba(255, 255, 255, .04), transparent 70%),
+                var(--wm-url) no-repeat center 50%;
+            background-size: clamp(420px, 30vw, 500px) auto;
+            opacity: .10;
+            filter: grayscale(1) contrast(1.05);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+            padding-left: calc(var(--remote-w) + 24px)
+        }
+
+        .container::before {
+            content: "";
+            position: sticky;
+            top: 0;
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            border-radius: 12px;
+            margin-bottom: 10px
+        }
+
+        .card,
+        .hero {
+            border: 1px solid #22252b;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow)
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            padding: 18px 22px;
+            margin: 16px 0;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, #0f1117), #0f1117 60%)
+        }
+
+        .hero .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: contain;
+            background: #000;
+            flex: 0 0 auto
+        }
+
+        .hero .title h1 {
+            margin: 0;
+            font-size: 24px
+        }
+
+        .hero .title p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        /* 좌측 리모컨 */
+        .side-remote {
+            position: fixed;
+            left: 24px;
+            top: 96px;
+            bottom: 24px;
+            width: var(--remote-w);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: rgba(21, 23, 28, .96);
+            border: 1px solid #2a2f38;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            backdrop-filter: blur(6px);
+            z-index: 1000
+        }
+
+        .remote-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 28%, #141821), #141821 55%);
+            border-bottom: 1px solid #303543;
+            border-radius: 16px 16px 0 0
+        }
+
+        .remote-header img {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #000
+        }
+
+        .remote-header .t {
+            line-height: 1.1
+        }
+
+        .remote-header .t strong {
+            display: block;
+            font-size: 14px
+        }
+
+        .remote-header .t span {
+            display: block;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .remote-list {
+            padding: 8px 8px 12px;
+            overflow: auto
+        }
+
+        .remote-group {
+            padding: 10px 8px 6px;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: .04em;
+            text-transform: uppercase
+        }
+
+        .remote-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: #0f1117;
+            color: var(--text)
+        }
+
+        .remote-item .ico {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #161b25;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px
+        }
+
+        .remote-item .label {
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .remote-item:hover {
+            border-color: #343a45;
+            background: #121622
+        }
+
+        .remote-item.active {
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 26%, transparent), transparent);
+            border-color: color-mix(in srgb, var(--accent) 38%, #2a2f38)
+        }
+
+        .remote-footer {
+            margin-top: auto;
+            padding: 10px 12px;
+            border-top: 1px solid #2a2f38
+        }
+
+        .remote-footer a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            background: #0f1117;
+            border: 1px solid #2a2f38;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 700
+        }
+
+        .remote-footer a:hover {
+            background: var(--accent);
+            border-color: transparent;
+            color: #111
+        }
+
+        @media (max-width:1180px) {
+            .remote-header .t {
+                display: none
+            }
+
+            .remote-header {
+                justify-content: center
+            }
+        }
+
+        @media (max-width:980px) {
+            .container {
+                padding-left: 24px;
+                padding-bottom: 90px
+            }
+
+            .side-remote {
+                position: fixed;
+                left: 50%;
+                bottom: 16px;
+                top: auto;
+                transform: translateX(-50%);
+                width: min(92vw, 720px);
+                height: auto;
+                max-height: none;
+                overflow: visible;
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                padding: 8px;
+                border-radius: 999px
+            }
+
+            .remote-header,
+            .remote-group,
+            .remote-footer {
+                display: none
+            }
+
+            .remote-list {
+                display: flex;
+                gap: 8px;
+                padding: 0
+            }
+
+            .remote-item {
+                margin: 0;
+                padding: 8px 12px
+            }
+
+            .remote-item .label {
+                display: none
+            }
+        }
+
+        /* 섹션/테이블 */
+        h2 {
+            font-size: 18px;
+            margin: 0 0 12px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .section {
+            scroll-margin-top: 14px
+        }
+
+        .section.card {
+            padding: 18px;
+            margin-top: 12px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 12px
+        }
+
+        thead {
+            background: #0f1320
+        }
+
+        th,
+        td {
+            font-size: 14px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #232630;
+            text-align: left
+        }
+
+        tbody tr:hover {
+            background: #0e1017
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px
+        }
+
+        .card.item {
+            padding: 12px
+        }
+
+        .card.item img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #111
+        }
+
+        .item .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px
+        }
+
+        .badge {
+            font-size: 12px;
+            color: #111;
+            background: linear-gradient(45deg, var(--accent), var(--accent-2));
+            padding: 4px 8px;
+            border-radius: 999px
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border: 1px solid #30343d;
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .media {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000
+        }
+
+        .media iframe {
+            width: 100%;
+            height: 360px;
+            border: 0
+        }
+
+        /* 순위표 하이라이트 */
+        table.standings tr.hl-team {
+            background: color-mix(in srgb, var(--accent) 18%, transparent)
+        }
+
+        table.standings tr.hl-team:hover {
+            background: color-mix(in srgb, var(--accent) 28%, transparent)
+        }
+
+        @supports not (background:color-mix(in srgb, red 10%, transparent)) {
+            table.standings tr.hl-team {
+                background: rgba(192, 0, 0, .12)
+            }
+
+            table.standings tr.hl-team:hover {
+                background: rgba(192, 0, 0, .18)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 좌측 리모컨 -->
+    <nav class="side-remote" id="remote"></nav>
+
+    <div class="container">
+        <!-- 상단 배너 -->
+        <section class="hero" id="hero">
+            <img id="hero-logo" class="logo" alt="팀 로고" />
+            <div class="title">
+                <h1 id="hero-title">KIA 타이거즈</h1>
+                <p class="muted" id="hero-sub">슬로건 · 연고지 · 창단</p>
+            </div>
+        </section>
+
+        <!-- 섹션들 (응원가 제거됨) -->
+        <section id="sec-overview" class="section card"></section>
+        <section id="sec-players" class="section card"></section>
+        <section id="sec-stand" class="section card"></section>
+        <section id="sec-stats" class="section card"></section>
+        <section id="sec-goods" class="section card"></section>
+        <section id="sec-food" class="section card"></section>
+        <section id="sec-map" class="section card"></section>
+    </div>
+
+    <script>
+        /* ================= 팀 데이터(KIA) ================= */
+        const team = {
+            abbr: "KIA",
+            name: "KIA 타이거즈",
+            slogan: "압도하라! V13",
+            founded: 1982,
+            home: "광주",
+            colors: { accent: "#EA0029", accent2: "#ff7a7a" },
+            logo: "https://i.namu.wiki/i/eQWnlHuotHNoTmiqIOnC5HQI_5WHrUwcucuZHUs3JW4EWYbZgEtQ-rXK2NDcGjbZB8vJ_RAz3f-IvnMqe0gR3wL-uciVgUP23wZTXYZbPBCcHS30qF4YpdeqeVLIOiLc_XRhqYTLYAZAIYlZ94zZiw.svg",
+            links: { home: "https://tigers.co.kr" },
+            stadium: { name: "광주 기아 챔피언스 필드", mapQuery: "광주 기아 챔피언스 필드" },
+
+            players: [
+                { name: "이범호", number: 71, pos: "감독", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_71_A.png" },
+
+                { name: "네일", number: 40, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_40_A.png" },
+                { name: "전상현", number: 51, pos: "투수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_51_A.png" },
+
+                { name: "김태군", number: 42, pos: "포수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_42_A.png" },
+
+                { name: "김선빈", number: 3, pos: "내야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_3_A.png" },
+                { name: "김규성", number: 14, pos: "내야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_14_A.png" },
+                { name: "오선우", number: 56, pos: "내야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_56_A.png" },
+                { name: "박민", number: 2, pos: "내야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_2_A.png" },
+                { name: "박찬호", number: 1, pos: "내야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_1_A.png" },
+
+                { name: "나성범", number: 47, pos: "외야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_47_A.png" },
+                { name: "최형우", number: 34, pos: "외야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_34_A.png" },
+                { name: "이창진", number: 8, pos: "외야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_8_A.png" },
+                { name: "박정우", number: 15, pos: "외야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_15_A.png" },
+                { name: "김호령", number: 27, pos: "외야수", img: "https://tigers.co.kr/files/playerImg/tigersImg/2025_27_A.png" },
+            ],
+
+            standings: [
+                { rank: 1, team: "LG", w: 66, l: 42, pct: .611 },
+                { rank: 2, team: "한화", w: 62, l: 42, pct: .596 },
+                { rank: 3, team: "롯데", w: 58, l: 49, pct: .542 },
+                { rank: 4, team: "SSG", w: 54, l: 49, pct: .524 },
+                { rank: 5, team: "KIA", w: 51, l: 50, pct: .505 },
+                { rank: 6, team: "KT", w: 54, l: 53, pct: .505 },
+                { rank: 7, team: "NC", w: 49, l: 49, pct: .500 },
+                { rank: 8, team: "삼성", w: 51, l: 56, pct: .477 },
+                { rank: 9, team: "두산", w: 45, l: 59, pct: .433 },
+                { rank: 10, team: "키움", w: 33, l: 74, pct: .308 },
+            ],
+
+            stats: {
+                hitters: [
+                    { rank: 1, name: "최형우", team: "KIA", avg: .315, hr: 17, rbi: 63 },
+                    { rank: 2, name: "고종욱", team: "KIA", avg: .311, hr: 3, rbi: 16 },
+                    { rank: 3, name: "김도영", team: "KIA", avg: .309, hr: 7, rbi: 27 },
+                ],
+                pitchers: [
+                    { rank: 1, name: "전상현", team: "KIA", era: 3.19, so: 34, w: 6 },
+                    { rank: 2, name: "조상우", team: "KIA", era: 4.91, so: 45, w: 4 },
+                    { rank: 3, name: "최지민", team: "KIA", era: 4.81, so: 31, w: 2 },
+                ]
+            },
+
+            goods: [
+                { name: "홈 유니폼", price: "₩129,000", img: "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20250422/PARTNER_94559/20250422150704c692ea1f8d9b430dbb608b0370c25516/f1be0cc52f87ad593158.jpg" },
+                { name: "볼캡", price: "₩43,000", img: "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20250321/PARTNER_94559/202503211139223f7236ec6dac422b96a9944dc84c3321/15d4d4940c920bb4339a.jpg" },
+                { name: "페이퍼스틱스", price: "₩5,000", img: "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20230330/PARTNER_94559/20230330095028f796b732cb314c7e8b85ba644ff68c36/30b6a4b59cb97a697678.jpg" },
+                { name: "쿠로미 인형머리띠", price: "₩20,000", img: "https://tigers.cdn-nhncommerce.com/Mall-No-5WKb/PARTNER/20250813/PARTNER_94559/2025081314510909541803caa14dcabbe36b818ad22306/874c86f6245e0413a870.jpg" },
+            ],
+            foods: [
+                { name: "꾸석지진짜한돈 용봉점", type: "돼지고기구이", link: "https://map.naver.com/p/search/%EA%BE%B8%EC%84%9D%EC%A7%80%EC%A7%84%EC%A7%9C%ED%95%9C%EB%8F%88%20%EC%9A%A9%EB%B4%89%EC%A0%90/place/1674462866?c=15.00,0,0,0,dh" },
+                { name: "대천조개구이", type: "조개요리", link: "https://map.naver.com/p/entry/place/1107614906?c=15.00,0,0,0,dh" },
+                { name: "고향보쌈칼국수 용봉점", type: "한식", link: "https://map.naver.com/p/entry/place/1265029678?c=15.00,0,0,0,dh" },
+            ],
+        };
+
+        /* ---------- 공용 렌더 유틸 ---------- */
+        const el = html => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
+        function setTheme() {
+            if (team.colors?.accent) document.documentElement.style.setProperty('--accent', team.colors.accent);
+            if (team.colors?.accent2) document.documentElement.style.setProperty('--accent-2', team.colors.accent2);
+            document.documentElement.style.setProperty('--wm-url', `url('${team.logo}')`);
+        }
+        function renderHeader() {
+            document.getElementById('hero-logo').src = team.logo;
+            document.getElementById('hero-title').textContent = team.name;
+            document.getElementById('hero-sub').textContent = `${team.slogan} · ${team.home} · ${team.founded}`;
+        }
+
+        // 스크롤 이동
+        function scrollToSection(id) {
+            if (id === 'sec-overview') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+            const t = document.getElementById(id); if (!t) return;
+            const y = t.getBoundingClientRect().top + window.scrollY - 10;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+
+        // 리모컨 활성화 제어
+        function setActiveInRemote(targetId) {
+            document.querySelectorAll('#remote .remote-item')
+                .forEach(b => b.classList.toggle('active', b.dataset.target === targetId));
+        }
+
+        let suppressSync = false;   // 클릭 직후 스크롤 동기화 잠시 정지
+        let suppressTimer = null;
+
+        function renderRemote() {
+            const nav = document.getElementById('remote');
+            const ICON = { 'sec-overview': '🏠', 'sec-players': '👥', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-food': '🍜', 'sec-map': '🗺️' };
+            const LABEL = id => ({ 'sec-overview': '개요', 'sec-players': '선수', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-food': '맛집', 'sec-map': '지도' }[id] || id);
+
+            // 응원가 제거 → 그룹에서 제외
+            const groups = [
+                { title: '정보', items: ['sec-overview', 'sec-players'] },
+                { title: '기록', items: ['sec-stand', 'sec-stats'] },
+                { title: '기타', items: ['sec-goods', 'sec-food', 'sec-map'] },
+            ];
+
+            nav.innerHTML = `
+        <div class="remote-header">
+          <img src="${team.logo}" alt=""><div class="t"><strong>${team.name}</strong><span>${team.home}</span></div>
+        </div>
+        <div class="remote-list" id="remote-list"></div>
+        <div class="remote-footer">
+          <a href="${team.links?.home || '#'}" target="_blank" rel="noopener"><span class="ico">🌐</span><span class="label">공식사이트</span></a>
+        </div>`;
+
+            const list = nav.querySelector('#remote-list');
+            groups.forEach(g => {
+                list.appendChild(el(`<div class="remote-group">${g.title}</div>`));
+                g.items.forEach(id => {
+                    const btn = el(`<button class="remote-item" data-target="${id}">
+            <span class="ico">${ICON[id] || '•'}</span><span class="label">${LABEL(id)}</span></button>`);
+                    btn.addEventListener('click', () => {
+                        // 1) 즉시 하이라이트
+                        setActiveInRemote(id);
+                        // 2) 스크롤 중에는 관성 동기화 막기
+                        suppressSync = true; clearTimeout(suppressTimer);
+                        suppressTimer = setTimeout(() => suppressSync = false, 900);
+                        // 3) 스크롤 이동
+                        scrollToSection(id);
+                    });
+                    list.appendChild(btn);
+                });
+            });
+
+            // 스크롤로 이동했을 때만(사용자 수동 스크롤) 동기화
+            const io = new IntersectionObserver((entries) => {
+                if (suppressSync) return;
+                entries.forEach(e => { if (e.isIntersecting) setActiveInRemote(e.target.id); });
+            }, { threshold: .55, rootMargin: "-10% 0px -35% 0px" });
+            document.querySelectorAll('.section').forEach(sec => io.observe(sec));
+
+            const first = list.querySelector('.remote-item'); if (first) first.classList.add('active');
+        }
+
+        /* ----- 섹션 렌더 ----- */
+        function renderOverview() {
+            document.getElementById('sec-overview').innerHTML = `
+        <h2>구단 정보</h2>
+        <div class="grid-2">
+          <div class="card" style="padding:14px"><div class="muted">연고지</div><div>${team.home}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">창단</div><div>${team.founded}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">구장</div><div>${team.stadium.name}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">슬로건</div><div>${team.slogan}</div></div>
+        </div>`;
+        }
+
+        function renderPlayers() {
+            document.getElementById('sec-players').innerHTML = `
+        <h2>선수 프로필</h2>
+        <div class="cards">
+          ${team.players.map(p => `
+            <div class="card item">
+              <img src="${p.img}" alt="${p.name}" />
+              <div class="meta">
+                <div><div style="font-weight:700">${p.name}</div><div class="muted">${p.pos}</div></div>
+                <span class="badge">${p.number}</span>
+              </div>
+            </div>`).join('')}
+        </div>`;
+        }
+
+        function renderStandings() {
+            const rows = team.standings.map(s => `
+        <tr class="${s.team === team.abbr ? 'hl-team' : ''}">
+          <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
+        </tr>`).join('');
+            document.getElementById('sec-stand').innerHTML = `
+        <h2>구단 순위</h2>
+        <table class="card standings">
+          <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+        }
+
+        function renderStats() {
+            document.getElementById('sec-stats').innerHTML = `
+        <h2>개인기록</h2>
+        <div class="row">
+          <div class="card" style="padding:12px">
+            <h3 style="margin:8px 0 6px">타자 TOP</h3>
+            <table>
+              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr></thead>
+              <tbody>${team.stats.hitters.map(h => `<tr><td>${h.rank}</td><td>${h.name}</td><td>${h.team}</td><td>${h.avg.toFixed(3)}</td><td>${h.hr}</td><td>${h.rbi}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>
+          <div class="card" style="padding:12px">
+            <h3 style="margin:8px 0 6px">투수 TOP</h3>
+            <table>
+              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr></thead>
+              <tbody>${team.stats.pitchers.map(p => `<tr><td>${p.rank}</td><td>${p.name}</td><td>${p.team}</td><td>${p.era.toFixed(2)}</td><td>${p.so}</td><td>${p.w}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>
+        </div>`;
+        }
+
+        function renderGoods() {
+            document.getElementById('sec-goods').innerHTML = `
+        <h2>굿즈 소개</h2>
+        <div class="cards">
+          ${team.goods.map(g => `
+            <div class="card item">
+              <img src="${g.img}" alt="${g.name}" />
+              <div class="meta"><div>${g.name}</div><span class="badge">${g.price}</span></div>
+            </div>`).join('')}
+        </div>`;
+        }
+
+        function renderFoods() {
+            document.getElementById('sec-food').innerHTML = `
+        <h2>주변 맛집</h2>
+        <table class="card">
+          <thead><tr><th>상호</th><th>종류</th><th>링크</th></tr></thead>
+          <tbody>${team.foods.map(r => `<tr><td>${r.name}</td><td>${r.type}</td><td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td></tr>`).join('')}</tbody>
+        </table>`;
+        }
+
+        function renderMap() {
+            const src = `https://www.google.com/maps?q=${encodeURIComponent(team.stadium.mapQuery)}&output=embed`;
+            document.getElementById('sec-map').innerHTML = `
+        <h2>구장 위치 — ${team.stadium.name}</h2>
+        <div class="media card"><iframe loading="lazy" src="${src}" title="지도"></iframe></div>`;
+        }
+
+        /* 실행 */
+        setTheme(); renderHeader(); renderRemote();
+        renderOverview(); renderPlayers(); renderStandings(); renderStats(); renderGoods(); renderFoods(); renderMap();
+    </script>
+</body>
+
+</html>
