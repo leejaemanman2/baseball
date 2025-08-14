@@ -4,20 +4,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>구단 상세 | KT wiz</title>
+    <title>구단 상세 | NC 다이노스</title>
     <style>
         :root {
             --bg: #0b0c10;
             --panel: #15171c;
             --text: #e6e8ec;
             --muted: #9aa3af;
-            --accent: #000000;
-            --accent-2: #434343;
+            --accent: #315288;
+            --accent-2: #86A8E7;
             --radius: 16px;
             --shadow: 0 10px 30px rgba(0, 0, 0, .25);
             /* 리모컨 폭(반응형) */
             --remote-w: clamp(180px, 22vw, 240px);
-            --wm-url: url('https://i.namu.wiki/i/6lNdZKRIOC1zVdIMr-LMLWSyZ9kvWmFUVIr0w7c4a70wKaRjKAsC-r6_ZMjS5OpVgwZnUb1WcOqRXX5gah8TZQ.svg');
+            --wm-url: url('https://i.namu.wiki/i/NpB-Pj0K0PHdNl6sbHMjg5sVa1t6afHlsKeYATxuWDDuxe8tIbV_KcOhgOP74us-B5d552T4bpXRsb7SJGM04Eha81CJIohhHmDvw3vm3otxQqln2-L45JxjYkO3UX-aFf1D-U5ZmaQljCGyMT1Abw.svg');
         }
 
         * {
@@ -376,7 +376,7 @@
 
         .badge {
             font-size: 12px;
-            color: white;
+            color: #111;
             background: linear-gradient(45deg, var(--accent), var(--accent-2));
             padding: 4px 8px;
             border-radius: 999px
@@ -408,17 +408,6 @@
             width: 100%;
             height: 360px;
             border: 0
-        }
-
-        #player {
-            display: none;
-            /* 보이지 않게 처리 */
-        }
-
-        button {
-            font-size: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
         }
 
 
@@ -455,8 +444,8 @@
         <section class="hero" id="hero">
             <img id="hero-logo" class="logo" alt="팀 로고" />
             <div class="title">
-                <h1 id="hero-title">KT wiz</h1>
-                <p class="muted" id="hero-sub">100년을 위한 10년의 여정 · 수원 케이타 위즈 파크 · 2013</p>
+                <h1 id="hero-title">NC 다이노스</h1>
+                <p class="muted" id="hero-sub">Light Now! · 창원NC파크 · 2011</p>
             </div>
         </section>
 
@@ -479,11 +468,11 @@
             window.ytPlayer = new YT.Player('player', {
                 height: '0',
                 width: '0',
-                videoId: 'vcIzm0wvO90',
+                videoId: '9Hi4LtO01oU',
                 playerVars: {
                     autoplay: 1,
                     loop: 1,
-                    playlist: 'vcIzm0wvO90',
+                    playlist: '9Hi4LtO01oU',
                     // mute 옵션은 playerVars에 없음
                 },
                 events: {
@@ -516,48 +505,48 @@
 
         /* ---------- 팀 데이터 ---------- */
         const team = {
-            name: "KT wiz", slogan: "100년을 위한 10년의 여정", founded: 2013, home: "수원시",
-            colors: { accent: "#000000", accent2: "#434343" },
-            logo: "https://i.namu.wiki/i/6lNdZKRIOC1zVdIMr-LMLWSyZ9kvWmFUVIr0w7c4a70wKaRjKAsC-r6_ZMjS5OpVgwZnUb1WcOqRXX5gah8TZQ.svg",
-            links: { home: "https://www.ktwiz.co.kr/" },
-            stadium: { name: "수원 케이티 위즈 파크", mapQuery: "수원 케이티 위즈 파크" },
+            name: "NC 다이노스", slogan: "Light Now!", founded: 2011, home: "창원시",
+            colors: { accent: "#315288", accent2: "#86A8E7" },
+            logo: "https://i.namu.wiki/i/NpB-Pj0K0PHdNl6sbHMjg5sVa1t6afHlsKeYATxuWDDuxe8tIbV_KcOhgOP74us-B5d552T4bpXRsb7SJGM04Eha81CJIohhHmDvw3vm3otxQqln2-L45JxjYkO3UX-aFf1D-U5ZmaQljCGyMT1Abw.svg",
+            links: { home: "https://www.ncdinos.com/://www.lgtwins.com" },
+            stadium: { name: "창원NC파크", mapQuery: "창원NC파크" },
             // anthem: {youtube: "https://www.youtube.com/embed/S2cCk1rI2mI?rel=0" },
 
             players: [
-                { name: "이강철", pos: "감독", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/89620_2025-03-13_162004.jpg", number: "71" },
+                { name: "이호준", pos: "감독", img: "https://i.namu.wiki/i/sVN56Zyw766tmcLqr4qhZ9Fc9-f_NSJf6a1P05b_CR2yVJhhq6DIyMjzF5n53KtT2w_U2nDz7ptZ3LNdY8LrQf9db5M4-1SQ8Omo6JfOsjc89Aahem8rVmwImCTN9uWgZimT-HCv5CPOkW6TlMphow.webp", number: "27" },
 
 
-                { name: "박민석", pos: "내야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/69056_2025-08-09_170704.jpg", number: "2" },
-                { name: "강민성", pos: "내야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/69064_2025-08-09_170724.jpg", number: "5" },
-                { name: "김상수", pos: "내야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/79402_2025-08-09_170941.jpg", number: "7" },
-                { name: "문상철", pos: "내야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/64007_2025-08-09_170153.jpg", number: "24" },
-                { name: "권동진", pos: "내야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/51003_2025-08-09_165630.jpg", number: "52" },
+                { name: "박민우", pos: "내야수", img: "https://i.namu.wiki/i/AfRSQnbneTxuTVgoGAgHlp_Kfx16l2rlS-dp5ZhDHkZpyz9TPe2HTydBX0Bi6oa4okAY4g01FR8q6mQj7G4AXfWu1CmthxWbb-hW0jTh_6cCd91wp9Loy5Po2MDnf0kXIMGwxvFr1iY_STuNRf4d4Q.webp", number: "2" },
+                { name: "김주원", pos: "내야수", img: "https://i.namu.wiki/i/4oAb2GDuOfg7unFFy8qVd0VHEsDRBiS-GvYKIcRUZV-fDUu98r5qRupmc-xXzvKxGDJCjzbI8S5jjMiV_oS5z7_gw_wuYgTNzxaQweJbxNCI8KTZKp-_-WiL1o7-10RtWUnGL2HPKIBfaVtemEw2Yg.webp", number: "7" },
+                { name: "데이비슨", pos: "내야수", img: "https://i.namu.wiki/i/N3sqJeKxSNhth32nayIxyo0PKKEJVvpR3KRjSZnmizIJitBaEjoRXMXwaEPRAgIvDRvIyzuntCY4bf-wmoaGrkolvjxnp-W53BjQSvfrt_P-fIrq5lHbF4_J25jdzzDbc0TJ2XZ306JfwWQlG0AKWQ.webp", number: "24" },
+                { name: "김한별", pos: "내야수", img: "https://i.namu.wiki/i/2gSGiy1VRKzfAI8cg3b_l7Vh36QXLMMAcnp2iUiw0qjwMoYQAlHe4JDqXG6uLGrihurdn7pF7w916A9g5fNIeQCyyvPcPwFCNPnADI2QYqcOzAM3czVmQieMmeZejINKjyjEXMox6h-qztydkPhL8Q.webp", number: "68" },
+                { name: "김휘집", pos: "내야수", img: "https://i.namu.wiki/i/T8aIv2DT5RMz_LOqR7Kjlx1iFIl2TKH-AtgUp0drkpe5gCDj6tjOrVrgYPsxNBeRuVlT4LbUKmUIDFd3_AkA1kvJ0wKgX2GelFRQV4GsfaNJx9XbHjriqpFEqKw26Aq-T7_GgXeMDpPdhluWhsn85A.webp", number: "44" },
 
 
-                { name: "김건형", pos: "외야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/51005_2025-08-09_165703.jpg", number: "0" },
-                { name: "김민혁", pos: "외야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/64004_2025-08-09_170143.jpg", number: "53" },
-                { name: "김병준", pos: "외야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/52002_2025-08-09_165816.jpg", number: "53" },
-                { name: "김병준", pos: "외야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/52002_2025-08-09_165816.jpg", number: "57" },
-                { name: "박민석", pos: "외야수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/55004_2025-08-09_170006.jpg", number: "104" },
+                { name: "송승환", pos: "외야수", img: "https://i.namu.wiki/i/-62fx5WIlp8Z_iNYemUOzEgdGGi6ZyuEwh5691Dkf0gp0yBJPq9K8jdGtYYRBK28u9QnvAKFjE1K68RSPLgJhxjA6gDhtQlyIo6z2qFcoAyayda9DsRg6wzjS3c3ym982cHxaMCqJciHmMtqV3obfg.webp", number: "8" },
+                { name: "박건우", pos: "외야수", img: "https://i.namu.wiki/i/iIvgwYMr5C5K86fYTvpoT-aA5f8nehlSE6Zo0PVOIG_4nmigZ2RxffRWbAtssqvsDemjg2rXs5zeaVd4xbjoEKhN0QKVQYXgshLqnfEgxMTMzTCJplR8D5bYfmRsMSTMTgi4YUcGLcB9FnVt6zvD-Q.webp", number: "37" },
+                { name: "최원준", pos: "외야수", img: "https://i.namu.wiki/i/9QaJp3vEcnaoGsKlsXvHUH428ECbIH2ZGqnrZKyL6Eov_g1G2uCaG7F2wc5T1OKQAnaONCJa4_hJhtjqFb_ldJ7SMTE2g5k43exFl_AmFvWDDCkzWLS4uTqXeqXtGxiWjltW8jRzrXi-3llSfMje0g.webp", number: "31" },
+                { name: "박영빈", pos: "외야수", img: "https://i.namu.wiki/i/iWogr8qCTWiDI16U0Y8DczjpIuiLQQsIf23MMdOgNfRYjgcWkdTIS-4aXGg1RxvhIiLSv6UyZz5o2ekF7GH-6GlFW4uOi-zWjxlnUG5mkOKnQ9U4NRohiT_XTNmsgD0d6zlEUtSijZW-6x3fTaXvsA.webp", number: "39" },
+                { name: "고승완", pos: "외야수", img: "https://i.namu.wiki/i/vwVlOGs6Et6GDTnZVkZD3y3xP8y-EbzqHSww_S8CeKRPGO45Kvo15mPuUjuUCXzjmS9s9nbbGpuoOlduLI_OI6odMnd7g8NEZ8QRKAuu3OiCer2QYmuZ6INqCtTNsEiu01Bo0IOuECk5uresbMptbQ.webp", number: "60" },
 
 
-                { name: "강건", pos: "투수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/53006_2025-08-09_165837.jpg", number: "99" },
-                { name: "고영표", pos: "투수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/64001_2025-08-09_170133.jpg", number: "1" },
-                { name: "김민수", pos: "투수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/65048_2025-08-09_170317.jpg", number: "26" },
-                { name: "김재원", pos: "투수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/55043_2025-08-09_170108.jpg", number: "43" },
-                { name: "김주완", pos: "투수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/51299_2025-08-09_165753.jpg", number: "98" },
+                { name: "라일리", pos: "투수", img: "https://i.namu.wiki/i/DIey5iWwJ26kNJquPqJHPWV5OUdJADa2AyaDFz_1MCcVKhYUeFGC_o-A8acdxuJJ7-cG77tQS0TlZoF8D8OH6jeCcU8D-8oFy1GaOKG5biUIPj-8bfFJFpV-nz6LXPNYR0YAfv9bycyJ4n-uQdH_hA.webp", number: "8" },
+                { name: "로건", pos: "투수", img: "https://i.namu.wiki/i/nHN4gv3eAsLExLgJuZx_tWZdrfe-Z-3CSFSCEoOuSJ2tdmGeUlCwgGFKnvjW9IAMjvgcL7om1TCeoV2eJ3Rn80Dn7r5F-pJo67o4oA73h7iVbMbcHQVX-m0plZDg21dvZc5DyKo1cdNpeuY-AcxVxA.webp", number: "12" },
+                { name: "신민혁", pos: "투수", img: "https://i.namu.wiki/i/A28sO7txFmkRaeuj0XB7Vfhdmgbo9iGTmjvdBRDaT2Mqpl-WMHB0a32NIuSAM94ClKcRWHvS9GaV4lyZchwPR2Cuu1XeyzYJBj_6nW1X3TJcgQdxLbYSElsJnYXLycIMHj_yTLK0HWiQT7MEfTtZLg.webp", number: "18" },
+                { name: "구창모", pos: "투수", img: "https://i.namu.wiki/i/YmM6jPNBgM97ToB99KZZcivThm5iRkGqlxnTEqsNqxSi5JcLPvyc4cLVrhfMoun2CgneRW9xCsUdsafrIuc4w4-batydjITyLujiCl2qjpaoU2sveIEjSpUbsUdslR_Cw8NKfXz5D0BFUc6cclYa4Q.webp", number: "59" },
+                { name: "김준원", pos: "투수", img: "https://i.namu.wiki/i/LWG7UpfnMAneLPDtGzglgsh-y4lHnnArK978tuxkwiuyVXmcddzlXUdakMJdHXcG61owtyWAw9sjR5tnk-WnKKS8H7bFIyj9-EqtKpoEfXjcPremVEcechsKuazuxHj9H1b8Eb17-MaHrLLSFJabdA.webp", number: "106" },
 
 
-                { name: "장성우", pos: "포수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/78548_2025-08-09_170911.jpg", number: "22" },
-                { name: "조대현", pos: "포수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/68089_2025-08-09_170549.jpg", number: "42" },
-                { name: "강백호", pos: "포수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/68050_2025-08-09_170536.jpg", number: "50" },
-                { name: "강현우", pos: "포수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/50066_2025-08-09_165526.jpg", number: "55" },
-                { name: "김민석", pos: "포수", img: "https://wizzap.ktwiz.co.kr/files/playerImg/ktImg/54097_2025-08-09_165941.jpg", number: "97" },
+                { name: "안중열", pos: "포수", img: "https://i.namu.wiki/i/hYASHP2p8xcRnUxukY30T8MrzF-OrtKygJYYBFk0QCeXKamHJOLA23VGlwGeaNreXJAm7BzNM1IxywLu3o5lFjHCrg0489eqcNoRZEIx_vc9cRwCH4CxbSePJjkZcdO1v-yS2VHsMcwOzPrLBTYrPg.webp", number: "1" },
+                { name: "박세혁", pos: "포수", img: "https://i.namu.wiki/i/VOnf_0s3rYvk6VxxSQSrQjjw_XnwB1Ph7_aLcKcj014j9KbJlJjML0Oyn9uU_A6VaeMo1CjcwNyRGYpfiMz3Nt8W_vamDGaOhwagG6w_N8CLLHCYuftDbpLxceSzIv1_goGrEg6m8px8q96gAHZCnA.webp", number: "10" },
+                { name: "김형준", pos: "포수", img: "https://i.namu.wiki/i/A28sO7txFmkRaeuj0XB7Vfhdmgbo9iGTmjvdBRDaT2Mqpl-WMHB0a32NIuSAM94ClKcRWHvS9GaV4lyZchwPR2Cuu1XeyzYJBj_6nW1X3TJcgQdxLbYSElsJnYXLycIMHj_yTLK0HWiQT7MEfTtZLg.webp", number: "25" },
+                { name: "박성재", pos: "포수", img: "https://i.namu.wiki/i/8lLQer5q1nrXFqPcvCMKZTLOiJlpUEmK2rqqzoop-rmN2fU99ahzXjyu8_fBVuZZAtlPQ0RIgsOFc9BIVnCpmUWyHH5acTYhty8hAte7OiTvn3LFLXdP5nBgJNvXBIMe16ZlZcQdWBllOlpFlM48rQ.webp", number: "102" },
+                { name: "김동현", pos: "포수", img: "https://i.namu.wiki/i/_eKMj-QIKNhez5IXSswWrg9fiP18Hijsz1QlKokgPSP2O5saHrMK1Q_nbPiY2lsxVi3RmLW8nNGrWYt3WM6Rb4npILmdmoCC8Ti5xiwc5ddT2LWuvt6N5AHGy1VzD5HTi-pFxKvztzOnwChYKpLH4g.webp", number: "103" },
             ],
             foods: [
-                { name: "청년 닭갈비", type: "닭갈비", link: "https://www.google.co.kr/maps/place/%EC%9E%A5%EC%95%88%EB%8B%AD%EA%B0%88%EB%B9%84/data=!4m11!1m3!2m2!1z7IiY7JuQIOyyreuFhCDri63qsIjruYQ!6e5!3m6!1s0x357b5cc30734b08f:0xc0b282899ce2de08!8m2!3d37.3024401!4d127.0104065!15sChfsiJjsm5Ag7LKt64WEIOuLreqwiOu5hFoaIhjsiJjsm5Ag7LKt64WEIOuLrSDqsIjruYSSAQpyZXN0YXVyYW50mgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVU5TZEZCdFNFWm5FQUWqAXkKCS9tLzA0OHdwYgoKL20vMDRsZnN4egoIL20vMDliNXQQASoVIhHssq3rhYQg64utIOqwiOu5hCgJMh8QASIbcExZ-_-EHEWrn49tz1dIA9F7HUOUOh_u5NqzMhwQAiIY7IiY7JuQIOyyreuFhCDri60g6rCI67mE4AEA-gEECAYQFQ!16s%2Fg%2F11f6c43xgw?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
-                { name: "부리또인 수원정자점 ", type: "부리또", link: "https://www.google.co.kr/maps/place/%EB%B6%80%EB%A6%AC%EB%98%90%EC%9D%B8+%EC%88%98%EC%9B%90%EC%A0%95%EC%9E%90%EC%A0%90/data=!4m10!1m2!2m1!1z67aA66as65iQ!3m6!1s0x357b5d2ba8dd774b:0x616255f2dc2486f2!8m2!3d37.2950094!4d126.993851!15sCgnrtoDrpqzrmJBaCyIJ67aA66as65iQkgESbWV4aWNhbl9yZXN0YXVyYW50mgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVU0yYzJKNU9XWm5FQUWqAUsKCS9tLzAxajN6chABKg0iCeu2gOumrOuYkCgJMh4QASIaRNZUP4fSwPiqIMMiWyLEVCWFF6w_JkeuTKgyDRACIgnrtoDrpqzrmJDgAQD6AQQIABAm!16s%2Fg%2F11dznx6zc5?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
-                { name: "보영만두", type: "만두", link: "https://www.google.co.kr/maps/place/%EB%B3%B4%EC%98%81%EB%A7%8C%EB%91%90/data=!4m10!1m2!2m1!1z67O07JiB66eM65GQ!3m6!1s0x357b5cc4f6c3bcbb:0x7d184ca677c4d0f7!8m2!3d37.2989326!4d127.0102416!15sCgzrs7TsmIHrp4zrkZBaDyIN67O07JiBIOunjOuRkJIBEmRpbV9zdW1fcmVzdGF1cmFudKoBNhABMh8QASIbLFmvVH77RZ5Tp6JlEvrB_dbh_BDvXaRBjlNqMhEQAiIN67O07JiBIOunjOuRkOABAA!16s%2Fg%2F11bytsxcg0?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
+                { name: "억만장자춘천닭갈비", type: "닭갈비", link: "https://www.google.com/maps/place/%EC%96%B5%EB%A7%8C%EC%9E%A5%EC%9E%90%EC%B6%98%EC%B2%9C%EB%8B%AD%EA%B0%88%EB%B9%84%26%EB%B6%80%EB%8C%80%EC%B0%8C%EA%B0%9C/data=!4m6!3m5!1s0x356f320db8c2b2a1:0x5351294996134f8d!8m2!3d35.220393!4d128.5862514!16s%2Fg%2F1q5bt15ym?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
+                { name: "만석실비 ", type: "분식", link: "https://www.google.com/maps/place/%EB%A7%8C%EC%84%9D%EC%8B%A4%EB%B9%84/data=!3m1!4b1!4m6!3m5!1s0x356f32097440f6cf:0xbba18ba3ce704d86!8m2!3d35.2161371!4d128.5837162!16s%2Fg%2F11fdw8n3_n?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
+                { name: "모티키친", type: "피자", link: "https://www.google.com/maps/place/%EB%A7%8C%EC%84%9D%EC%8B%A4%EB%B9%84/data=!4m9!1m2!2m1!1z66qo7Yuw7YKk7LmcIA!3m5!1s0x356f32097440f6cf:0xbba18ba3ce704d86!8m2!3d35.2161371!4d128.5837162!16s%2Fg%2F11fdw8n3_n?entry=ttu&g_ep=EgoyMDI1MDgxMC4wIKXMDSoASAFQAw%3D%3D" },
             ],
             standings: [
                 { rank: 1, team: "LG", w: 66, l: 42, pct: .611 },
@@ -573,21 +562,21 @@
             ],
             stats: {
                 hitters: [
-                    { rank: 1, name: "안현민", team: "KT", avg: .351, hr: 18, rbi: 65 },
-                    { rank: 2, name: "이호연", team: "KT", avg: .333, hr: 1, rbi: 4 },
-                    { rank: 3, name: "김민혁", team: "KT", avg: .292, hr: 0, rbi: 30 },
+                    { rank: 1, name: "김정호", team: "NC", avg: .444, hr: 0, rbi: 0 },
+                    { rank: 2, name: "데이비슨", team: "NC", avg: .313, hr: 22, rbi: 59 },
+                    { rank: 3, name: "박민우", team: "NC", avg: .307, hr: 3, rbi: 63 },
                 ],
                 pitchers: [
-                    { rank: 1, name: "패트릭", team: "KT", era: 1.29, so: 15, w: 1 },
-                    { rank: 2, name: "손동현", team: "KT", era: 1.91, so: 41, w: 3 },
-                    { rank: 3, name: "최용준", team: "KT", era: 2.00, so: 5, w: 1 },
+                    { rank: 1, name: "김영규", team: "NC", era: 1.27, so: 16, w: 1 },
+                    { rank: 2, name: "손주환", team: "NC", era: 3.03, so: 29, w: 5 },
+                    { rank: 3, name: "김진호", team: "NC", era: 3.04, so: 49, w: 2 },
                 ]
             },
             goods: [
-                { name: "홈 유니폼", price: "₩119,000", img: "https://image.nbkorea.com/NBRB_Product/20240412/NB20240412093129634001.jpg" },
-                { name: "볼캡", price: "₩35,000", img: "https://kbomarket.com/web/product/medium/20250324/ad59a5e2dda685e397d0027c888ac15b.jpg" },
-                { name: "머플러", price: "₩28,000", img: "https://fs.arumnet.com/image/N3810KTSPO//item/KT0411110221477/4.jpg" },
-                { name: "키링", price: "₩9,900", img: "https://fs.arumnet.com/image/N3810KTSPO//item/38100000004302/4.jpg" },
+                { name: "홈 유니폼", price: "₩119,000", img: "https://i.namu.wiki/i/sWmVDU-E51WkLacq3wGsdJVFsBCE-NvXmwzho1TOxsdQ7e-A12evwUofMiuO18AbXTmx8-d5S_Yb-xxzUsB61zRqykKAK5KnIxkgHMRjI2KCGXd-pi4hwxJmuJ7m1ygNI7OQqMmbTZS8kLTh_tZDzA.webp" },
+                { name: "볼캡", price: "₩35,000", img: "https://kbomarket.com/web/product/medium/202507/4fccde41bca3947c53315abe757eb3f1.jpg" },
+                { name: "머플러", price: "₩28,000", img: "https://mblogthumb-phinf.pstatic.net/20130503_242/omyknit_1367545753541JmBJI_JPEG/2013_008_nc_05.jpg?type=w420" },
+                { name: "키링", price: "₩9,900", img: "https://kbomarket.com/web/product/big/20250301/7fe1a3c2fcbc3911d0b53bb5c96869d0.jpg" },
             ],
         };
 
@@ -678,7 +667,7 @@
         // }
         function renderPlayers() {
             const host = document.getElementById('sec-players');
-            host.innerHTML = `<h2> 선수 프로필</h2>
+            host.innerHTML = `<h2> 선수 프로필</h2 >
             <div class="cards">
                 ${team.players.map(p => `
             <div class="card item">
@@ -761,3 +750,5 @@
 </body>
 
 </html>
+
+
