@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KBO 커뮤니티 게시판</title>
+
+    <!-- Bootstrap (선택) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+
+    <style>
+        :root {
+            --bg: #0b0c10;
+            --panel: #171a22;
+            --text: #e6e8ec;
+            --muted: #a3abb6;
+            --line: #232834;
+            --accent: #4da3ff;
+            --accent-2: #9ed1ff;
+            --chip: #222836;
+        }
+
+        html,
+        body {
+            background: #0f1220;
+            color: var(--text);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container-narrow {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 96px;
+            /* 아래 여백은 FAB 여유 */
+        }
+
+        /* 헤더: 좌측 프로젝트 제목 + 우측(아니라 요청대로 좌측 옆) 검색 */
+        .board-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .board-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #1a1f2d, #121725);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .25) inset;
+        }
+
+        .board-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            color: #eaf2ff;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .search-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--chip);
+            border: 1px solid #2a3142;
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+
+        .search-wrap input[type="search"] {
+            background: transparent;
+            border: 0;
+            outline: none;
+            color: var(--text);
+            width: clamp(220px, 32vw, 420px);
+        }
+
+        .btn {
+            border-radius: 10px;
+            border: 1px solid #2d3446;
+            background: #1c2232;
+            color: var(--text);
+            padding: 8px 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .chip {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: #1b2130;
+            color: var(--muted);
+            border: 1px solid #283046;
+        }
+
+        /* 상단 카테고리/유틸 영역 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 10px 0 14px;
+        }
+
+        .toolbar-left,
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 목록 테이블 (DC 느낌) */
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-top: 2px solid #3b455d;
+            background: #121728;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .board-table thead th {
+            background: #141a2b;
+            color: #c8d2e4;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            padding: 12px 8px;
+            border-bottom: 1px solid #252c40;
+            white-space: nowrap;
+        }
+
+        .board-table tbody td {
+            border-bottom: 1px solid #1f2536;
+            padding: 12px 10px;
+            font-size: 14px;
+            color: #e1e6f3;
+        }
+
+        .board-table tbody tr:hover td {
+            background: #161d31;
+        }
+
+        .col-no {
+            width: 80px;
+            text-align: center;
+            color: #9fb3d0;
+        }
+
+        .col-title {
+            width: auto;
+        }
+
+        .col-author {
+            width: 140px;
+            text-align: center;
+            color: #c6ccda;
+        }
+
+        .col-date {
+            width: 150px;
+            text-align: center;
+            color: #b1bdd6;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .col-views {
+            width: 90px;
+            text-align: right;
+            color: #9db0cf;
+        }
+
+        .col-reco {
+            width: 90px;
+            text-align: right;
+            color: #9fd0a0;
+        }
+
+        .title-link {
+            color: #e9f3ff;
+        }
+
+        .title-link:hover {
+            color: var(--accent-2);
+        }
+
+        .badge-notice {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: #1f2740;
+            color: #bcd1ff;
+            border: 1px solid #2c365a;
+            margin-right: 6px;
+        }
+
+        /* 페이지네이션 */
+        .pagination-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid #2b3346;
+            background: #151b2b;
+            color: #dbe6ff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: #223053;
+            border-color: #39518c;
+        }
+
+        /* 우하단 고정 스크롤 버튼 */
+        .scroll-fab {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .scroll-fab button {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid #2d3448;
+            background: #1b2132;
+            color: #e6edff;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+            transition: transform .15s ease, filter .15s ease;
+        }
+
+        .scroll-fab button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .scroll-fab button:active {
+            transform: translateY(0);
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .col-author {
+                display: none;
+            }
+
+            .col-reco {
+                display: none;
+            }
+
+            .col-views {
+                width: 80px;
+            }
+
+            .col-date {
+                width: 120px;
+            }
+
+            .search-wrap input[type="search"] {
+                width: 56vw;
+            }
+        }
+
+        /* === 글쓰기 모달 === */
+        .write-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+
+        .write-backdrop.active {
+            display: flex;
+        }
+
+        .write-panel {
+            width: min(860px, 92vw);
+            background: #121728;
+            border: 1px solid #2a3350;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+            padding: 18px;
+        }
+
+        .write-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .write-close {
+            background: transparent;
+            border: 0;
+            color: #cfd7ea;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .write-form label {
+            font-weight: 700;
+            color: #dbe6ff;
+            margin-top: 6px;
+        }
+
+        .write-form input,
+        .write-form select,
+        .write-form textarea {
+            width: 100%;
+            background: #121a2b;
+            border: 1px solid #2a3550;
+            color: #e9f3ff;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .write-form textarea {
+            min-height: 220px;
+            resize: vertical;
+        }
+
+        .write-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-narrow">
+        <!-- 헤더: 프로젝트 제목(좌측) + 검색 박스(그 옆) -->
+        <div class="board-header">
+            <div class="board-title">
+                <h1>KBO 구단 커뮤니티</h1>
+                <span class="chip">beta</span>
+            </div>
+
+            <form id="searchForm" class="search-wrap" role="search" aria-label="게시글 검색">
+                <input id="searchInput" type="search" placeholder="제목으로 검색..." aria-label="검색어 입력" />
+                <button type="submit" class="btn">검색</button>
+                <button type="button" id="btnReset" class="btn" title="검색 초기화">초기화</button>
+            </form>
+        </div>
+
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <!-- <span class="chip">전체</span>
+                <span class="chip">자유</span>
+                <span class="chip">응원</span>
+                <span class="chip">직관후기</span> -->
+            </div>
+            <div class="toolbar-right">
+                <button class="btn" id="btnWrite" type="button">글쓰기</button>
+            </div>
+        </div>
+
+        <!-- 목록 테이블 -->
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th class="col-no">번호</th>
+                    <th class="col-title">제목</th>
+                    <th class="col-author">글쓴이</th>
+                    <th class="col-date">작성일</th>
+                    <th class="col-views">조회</th>
+                    <th class="col-reco">추천</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyPosts">
+                <!-- JS가 채움 -->
+            </tbody>
+        </table>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination-wrap" id="pagination">
+            <!-- JS가 채움 -->
+        </div>
+    </div>
+
+    <!-- 글쓰기 모달 -->
+    <div class="write-backdrop" id="writeModal" aria-modal="true" role="dialog" aria-labelledby="writeTitle"
+        aria-hidden="true">
+        <div class="write-panel">
+            <div class="write-header">
+                <h2 id="writeTitle" class="h5 m-0">게시글 작성</h2>
+                <button class="write-close" id="writeClose" aria-label="닫기">✕</button>
+            </div>
+            <form id="writeForm" class="write-form">
+                <label for="wTitle">제목 <span class="text-danger">*</span></label>
+                <input id="wTitle" type="text" maxlength="80" placeholder="제목을 입력하세요" required>
+                <div class="row g-2" style="margin-top:8px;">
+                    <div class="col-md-6">
+                        <label for="wAuthor">글쓴이</label>
+                        <input id="wAuthor" type="text" placeholder="ㅇㅇ(익명)">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="wCategory">구단</label>
+                        <select id="wCategory">
+                            <option value="">선택 안 함</option>
+                            <option>LG 트윈스</option>
+                            <option>두산 베어스</option>
+                            <option>키움 히어로즈</option>
+                            <option>SSG 랜더스</option>
+                            <option>한화 이글스</option>
+                            <option>KIA 타이거즈</option>
+                            <option>롯데 자이언츠</option>
+                            <option>삼성 라이온즈</option>
+                            <option>NC 다이노스</option>
+                            <option>KT 위즈</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="wContent" style="margin-top:8px;">내용 <span class="text-danger">*</span></label>
+                <textarea id="wContent" placeholder="내용을 입력하세요" required></textarea>
+                <div class="write-actions">
+                    <button type="button" class="btn" id="writeCancel">취소</button>
+                    <button type="submit" class="btn">등록</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 우하단 고정 스크롤 FAB -->
+    <div class="scroll-fab" aria-label="빠른 스크롤 버튼">
+        <button id="toTop" title="맨 위로">▲</button>
+        <button id="toBottom" title="맨 아래로">▼</button>
+    </div>
+
+    <script>
+        // ===== 게시판 스크립트 (최근 작성일 순 정렬 + 모달 글쓰기) =====
+        const STORAGE_KEY = 'userPosts';
+
+        const twoDigit = n => String(n).padStart(2, '0');
+        const fmtKR = (ts) => {
+            const d = new Date(ts);
+            const yy = String(d.getFullYear()).slice(-2);
+            const mm = twoDigit(d.getMonth() + 1);
+            const dd = twoDigit(d.getDate());
+            const hh = twoDigit(d.getHours());
+            const mi = twoDigit(d.getMinutes());
+            return `${yy}.${mm}.${dd} ${hh}:${mi}`;
+        };
+
+        const loadUserPosts = () => {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                const arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) { return []; }
+        };
+        const saveUserPost = (post) => {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                const arr = raw ? JSON.parse(raw) : [];
+                Array.isArray(arr) ? arr.unshift(post) : null;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.isArray(arr) ? arr : [post]));
+            } catch (e) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([post]));
+            }
+        };
+
+        // 더미 데이터 생성 (ts 포함)
+        const makeDummy = (count = 48) => {
+            const titles = [
+                '오늘 직관 다녀왔습니다 (사진)', '기아 타선 미쳤다', 'LG 팬인데 질문 하나만', '두산 수비 라인업 토론',
+                'KT 용병 이슈 정리', '한화 선발 로테 재정비 필요', '삼성 유망주 보고서', 'SSG 최근 분위기',
+                'NC 데이터로 본 강점', '롯데 다음주 일정 총정리', '키움 상승세 이유'
+            ];
+            const authors = ['ㅇㅇ(223.62)', '엘갤주인', '곰돌e', 'SSG_팬', '한화eagles', 'ktlove', 'NCDin0', '롯데_부산'];
+            const arr = [];
+            const now = Date.now();
+            for (let i = count; i >= 1; i--) {
+                const t = titles[(Math.random() * titles.length) | 0];
+                const a = authors[(Math.random() * authors.length) | 0];
+                const ts = now - Math.random() * 7 * 86400000; // 최근 7일 내 랜덤
+                arr.push({ no: i, title: t, author: a, date: fmtKR(ts), ts, views: (Math.random() * 3000) | 0, reco: (Math.random() * 200) | 0 });
+            }
+            return arr;
+        };
+
+        const NOTICE = [
+            { no: '공지', title: '게시판 이용 수칙 안내', author: '운영자', date: '25.08.01 09:00', ts: new Date('2025-08-01T09:00:00').getTime(), views: 9999, reco: 999 },
+            { no: '공지', title: 'KBO 중계/하이라이트 링크 모음', author: '운영자', date: '25.08.05 12:10', ts: new Date('2025-08-05T12:10:00').getTime(), views: 8743, reco: 421 },
+        ];
+
+        const state = { all: [], page: 1, size: 15, q: '' };
+
+        const $ = sel => document.querySelector(sel);
+        const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+        function render() {
+            const tbody = document.getElementById('tbodyPosts');
+            const pagination = document.getElementById('pagination');
+
+            const base = state.q
+                ? state.all.filter(p => (p.title || '').toLowerCase().includes(state.q.toLowerCase()))
+                : state.all.slice();
+
+            const filtered = base.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+
+            const total = filtered.length;
+            const pages = Math.max(1, Math.ceil(total / state.size));
+            if (state.page > pages) state.page = pages;
+            const start = (state.page - 1) * state.size;
+            const items = filtered.slice(start, start + state.size);
+
+            const rows = [];
+            if (state.page === 1) {
+                for (const n of NOTICE) {
+                    rows.push(`<tr>
+            <td class="col-no"><span class="badge-notice">공지</span></td>
+            <td class="col-title"><a href="#" class="title-link">${n.title}</a></td>
+            <td class="col-author">${n.author}</td>
+            <td class="col-date">${n.date}</td>
+            <td class="col-views">${(n.views ?? 0).toLocaleString()}</td>
+            <td class="col-reco">${(n.reco ?? 0).toLocaleString()}</td>
+          </tr>`);
+                }
+            }
+
+            for (const p of items) {
+                rows.push(`<tr>
+          <td class="col-no">${(p.no !== undefined && p.no !== null) ? p.no : '신규'}</td>
+          <td class="col-title"><a href="#" class="title-link">${p.title}</a></td>
+          <td class="col-author">${p.author ?? '익명'}</td>
+          <td class="col-date">${p.date ?? ''}</td>
+          <td class="col-views">${(p.views ?? 0).toLocaleString()}</td>
+          <td class="col-reco">${(p.reco ?? 0).toLocaleString()}</td>
+        </tr>`);
+            }
+
+            tbody.innerHTML = rows.join('');
+
+            const btns = [];
+            const mk = (n, label = n, active = false) => `<button class="page-btn${active ? ' active' : ''}" data-page="${n}">${label}</button>`;
+            btns.push(mk(Math.max(1, state.page - 1), '〈'));
+            const windowSize = 5;
+            const startPage = Math.max(1, state.page - Math.floor(windowSize / 2));
+            const endPage = Math.min(pages, startPage + windowSize - 1);
+            for (let i = startPage; i <= endPage; i++) btns.push(mk(i, i, i === state.page));
+            btns.push(mk(Math.min(pages, state.page + 1), '〉'));
+            pagination.innerHTML = btns.join('');
+
+            $$('#pagination .page-btn').forEach(b => b.addEventListener('click', e => {
+                const n = Number(e.currentTarget.dataset.page);
+                if (!Number.isNaN(n)) { state.page = n; render(); }
+            }));
+        }
+
+        function openWriteModal() {
+            const modal = document.getElementById('writeModal');
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            requestAnimationFrame(() => document.getElementById('wTitle').focus());
+            const onEsc = (e) => { if (e.key === 'Escape') { closeWriteModal(); } };
+            modal.dataset.esc = 'true';
+            window.addEventListener('keydown', onEsc, { once: true });
+        }
+        function closeWriteModal() {
+            const modal = document.getElementById('writeModal');
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        // 초기화
+        (function init() {
+            // 저장된 사용자 게시글 + 더미 데이터
+            state.all = [...loadUserPosts(), ...makeDummy(57)];
+
+            // 검색/초기화
+            document.getElementById('searchForm').addEventListener('submit', e => {
+                e.preventDefault();
+                state.q = document.getElementById('searchInput').value.trim();
+                state.page = 1;
+                render();
+            });
+            document.getElementById('btnReset').addEventListener('click', () => {
+                document.getElementById('searchInput').value = '';
+                state.q = '';
+                state.page = 1;
+                render();
+            });
+
+            // 글쓰기 버튼 → 모달 오픈
+            document.getElementById('btnWrite').addEventListener('click', openWriteModal);
+
+            // 모달 닫기(버튼/취소/배경 클릭)
+            document.getElementById('writeClose').addEventListener('click', closeWriteModal);
+            document.getElementById('writeCancel').addEventListener('click', closeWriteModal);
+            document.getElementById('writeModal').addEventListener('click', (e) => {
+                if (e.target.id === 'writeModal') closeWriteModal();
+            });
+
+            // 모달 폼 제출 → 저장
+            document.getElementById('writeForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('wTitle').value.trim();
+                const author = document.getElementById('wAuthor').value.trim() || 'ㅇㅇ(익명)';
+                const category = document.getElementById('wCategory').value.trim();
+                const content = document.getElementById('wContent').value.trim();
+                if (!title) { alert('제목을 입력하세요.'); return; }
+                if (!content) { alert('내용을 입력하세요.'); return; }
+                const ts = Date.now();
+                const post = {
+                    no: null,
+                    title: category ? `[${category}] ${title}` : title,
+                    author,
+                    content,
+                    ts,
+                    date: fmtKR(ts),
+                    views: 0,
+                    reco: 0
+                };
+                saveUserPost(post);
+                state.all.unshift(post);
+                state.page = 1; // 등록 후 1페이지에서 확인
+                render();
+                // 폼 초기화 & 닫기
+                document.getElementById('writeForm').reset();
+                closeWriteModal();
+            });
+
+            // 스크롤 버튼
+            document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            document.getElementById('toBottom').addEventListener('click', () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }));
+
+            render();
+        })();
+    </script>
+</body>
+
+</html>
