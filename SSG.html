@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>구단 상세 | SSG 랜더스</title>
+    <style>
+        :root {
+            --bg: #0b0c10;
+            --panel: #15171c;
+            --text: #e6e8ec;
+            --muted: #9aa3af;
+            /* 구단색(SSG) */
+            --accent: #CE0E2D;
+            /* SSG Red */
+            --accent-2: #FF5A6E;
+            /* SSG Red의 라이트 톤 */
+            --radius: 16px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            --remote-w: clamp(180px, 22vw, 240px);
+            --wm-url: url('https://i.namu.wiki/i/KnZeE-tcJnwiDP4PlYI6OdHQVIeolMy1MNybksFImFPMvYhP7q0j-DrfYZ01ErZHw53iyJ1gwMAWLMVD8kvCwRav0GoKkmPIYHqEdq1wxSfK7IcKvZGGXyrjGmnVlGolZblTILci9olfN9kjanFj6g.svg');
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Malgun Gothic;
+            color: var(--text);
+            /* 팀 컬러 틴트 배경 */
+            background: linear-gradient(180deg,
+                    color-mix(in srgb, var(--accent) 10%, #0a0b10),
+                    color-mix(in srgb, var(--accent) 6%, #0e1117) 50%,
+                    color-mix(in srgb, var(--accent) 10%, #0a0b10));
+        }
+
+        a {
+            color: inherit
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(1100px 520px at 18% -12%, rgba(255, 255, 255, .06), transparent 70%),
+                radial-gradient(900px 520px at 85% 112%, rgba(255, 255, 255, .04), transparent 70%),
+                var(--wm-url) no-repeat center 50%;
+            background-size: clamp(420px, 30vw, 500px) auto;
+            opacity: .10;
+            filter: grayscale(1) contrast(1.05);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+            padding-left: calc(var(--remote-w) + 24px)
+        }
+
+        .container::before {
+            content: "";
+            position: sticky;
+            top: 0;
+            display: block;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            border-radius: 12px;
+            margin-bottom: 10px
+        }
+
+        .card,
+        .hero {
+            border: 1px solid #22252b;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow)
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            padding: 18px 22px;
+            margin: 16px 0;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, #0f1117), #0f1117 60%)
+        }
+
+        .hero .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: contain;
+            background: #000;
+            flex: 0 0 auto
+        }
+
+        .hero .title h1 {
+            margin: 0;
+            font-size: 24px
+        }
+
+        .hero .title p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        /* ===== 좌측 리모컨 ===== */
+        .side-remote {
+            position: fixed;
+            left: 24px;
+            top: 96px;
+            bottom: 24px;
+            width: var(--remote-w);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: rgba(21, 23, 28, .96);
+            border: 1px solid #2a2f38;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+            backdrop-filter: blur(6px);
+            z-index: 1000
+        }
+
+        .remote-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 28%, #141821), #141821 55%);
+            border-bottom: 1px solid #303543;
+            border-radius: 16px 16px 0 0
+        }
+
+        .remote-header img {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #000
+        }
+
+        .remote-header .t {
+            line-height: 1.1
+        }
+
+        .remote-header .t strong {
+            display: block;
+            font-size: 14px
+        }
+
+        .remote-header .t span {
+            display: block;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .remote-list {
+            padding: 8px 8px 12px;
+            overflow: auto
+        }
+
+        .remote-group {
+            padding: 10px 8px 6px;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: .04em;
+            text-transform: uppercase
+        }
+
+        .remote-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            background: #0f1117;
+            color: var(--text)
+        }
+
+        .remote-item .ico {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #161b25;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px
+        }
+
+        .remote-item .label {
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .remote-item:hover {
+            border-color: #343a45;
+            background: #121622
+        }
+
+        .remote-item.active {
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 26%, transparent), transparent);
+            border-color: color-mix(in srgb, var(--accent) 38%, #2a2f38)
+        }
+
+        .remote-footer {
+            margin-top: auto;
+            padding: 10px 12px;
+            border-top: 1px solid #2a2f38
+        }
+
+        .remote-footer a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            background: #0f1117;
+            border: 1px solid #2a2f38;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 700
+        }
+
+        .remote-footer a:hover {
+            background: var(--accent);
+            border-color: transparent;
+            color: #111
+        }
+
+        @media(max-width:1180px) {
+            .remote-header .t {
+                display: none
+            }
+
+            .remote-header {
+                justify-content: center
+            }
+        }
+
+        @media(max-width:980px) {
+            .container {
+                padding-left: 24px;
+                padding-bottom: 90px
+            }
+
+            .side-remote {
+                position: fixed;
+                left: 50%;
+                top: auto;
+                bottom: 16px;
+                transform: translateX(-50%);
+                width: min(92vw, 720px);
+                height: auto;
+                max-height: none;
+                overflow: visible;
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                padding: 8px;
+                border-radius: 999px
+            }
+
+            .remote-header,
+            .remote-group,
+            .remote-footer {
+                display: none
+            }
+
+            .remote-list {
+                display: flex;
+                gap: 8px;
+                padding: 0
+            }
+
+            .remote-item {
+                margin: 0;
+                padding: 8px 12px
+            }
+
+            .remote-item .label {
+                display: none
+            }
+        }
+
+        /* 섹션/테이블 */
+        h2 {
+            font-size: 18px;
+            margin: 0 0 12px
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .section {
+            scroll-margin-top: 14px
+        }
+
+        .section.card {
+            padding: 18px;
+            margin-top: 12px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 12px
+        }
+
+        thead {
+            background: #0f1320
+        }
+
+        th,
+        td {
+            font-size: 14px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #232630;
+            text-align: left
+        }
+
+        tbody tr:hover {
+            background: #0e1017
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px
+        }
+
+        .card.item {
+            padding: 12px
+        }
+
+        .card.item img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #111
+        }
+
+        .item .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px
+        }
+
+        .badge {
+            font-size: 12px;
+            color: #111;
+            background: linear-gradient(45deg, var(--accent), var(--accent-2));
+            padding: 4px 8px;
+            border-radius: 999px
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border: 1px solid #30343d;
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .media {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000
+        }
+
+        .media iframe {
+            width: 100%;
+            height: 360px;
+            border: 0
+        }
+
+        /* 순위표 하이라이트(해당 팀) */
+        table.standings tr.hl-team {
+            background: color-mix(in srgb, var(--accent) 18%, transparent)
+        }
+
+        table.standings tr.hl-team:hover {
+            background: color-mix(in srgb, var(--accent) 28%, transparent)
+        }
+
+        @supports not (background:color-mix(in srgb, red 10%, transparent)) {
+            table.standings tr.hl-team {
+                background: rgba(206, 14, 45, .12)
+            }
+
+            table.standings tr.hl-team:hover {
+                background: rgba(206, 14, 45, .18)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="side-remote" id="remote"></nav>
+
+    <div class="container">
+        <!-- 단일 히어로(그라디언트 + 로고) -->
+        <section class="hero" id="hero">
+            <img id="hero-logo" class="logo" alt="팀 로고" />
+            <div class="title">
+                <h1 id="hero-title">SSG 랜더스</h1>
+                <p class="muted" id="hero-sub">NO LIMITS AMAZING LANDERS · 인천 · 2000</p>
+            </div>
+        </section>
+
+        <section id="sec-overview" class="section card"></section>
+        <!-- 응원가 섹션 제거 -->
+        <section id="sec-players" class="section card"></section>
+        <section id="sec-stand" class="section card"></section>
+        <section id="sec-stats" class="section card"></section>
+        <section id="sec-goods" class="section card"></section>
+        <section id="sec-food" class="section card"></section>
+        <section id="sec-map" class="section card"></section>
+    </div>
+
+    <script>
+        /* ================= 팀 데이터(SSG) ================= */
+        const team = {
+            abbr: "SSG",
+            name: "SSG 랜더스",
+            slogan: "NO LIMITS AMAZING LANDERS",
+            founded: 2000,
+            home: "인천",
+            colors: { accent: "#CE0E2D", accent2: "#FF5A6E" },
+            logo: "https://i.namu.wiki/i/KnZeE-tcJnwiDP4PlYI6OdHQVIeolMy1MNybksFImFPMvYhP7q0j-DrfYZ01ErZHw53iyJ1gwMAWLMVD8kvCwRav0GoKkmPIYHqEdq1wxSfK7IcKvZGGXyrjGmnVlGolZblTILci9olfN9kjanFj6g.svg",
+            links: { home: "https://www.ssglanders.com" },
+            stadium: { name: "인천 SSG 랜더스필드", mapQuery: "인천 SSG 랜더스필드" },
+            anthem: { youtube: "" },
+
+            /* 감독 1 / 투수 2 / 포수 1 / 내야 5 / 외야 5  */
+            players: [
+                { name: "이승용", number: 71, pos: "감독", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/ef5392c89fac4c8b9a9c2db58d673a4a_20250219_022116.png" },
+
+                { name: "김광현", number: 29, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/911728ef39644966b0f7727b0f34771d_20250314_022735.png" },
+                { name: "김택형", number: 43, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/706a09c29d554d2ea8be5e04239b8018_20250314_022806.png" },
+
+                { name: "김민식", number: 24, pos: "포수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/c1196e9bc4d5492cab150b2413ec6021_20250314_023533.png" },
+
+                { name: "고명준", number: 18, pos: "내야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/1a9d3af577a144d0adeec055f422c0b5_20250314_020755.png" },
+                { name: "김성현", number: 6, pos: "내야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/f456c246a5ad438787136b6302ade934_20250314_020822.png" },
+                { name: "김찬형", number: 5, pos: "내야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/f8796f6a86464d8fb317fb82d28febe7_20250314_020853.png" },
+                { name: "김태윤", number: 36, pos: "내야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/141c520c07c04424a9a2872d470f2bc6_20250314_020904.png" },
+                { name: "박성한", number: 2, pos: "내야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/f6d4b03b20ae4b70909992d6f46a66ea_20250314_020922.png" },
+
+                { name: "기예르모 에레디아", number: 27, pos: "외야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/7e52fb73d69840d5b2f3bd00f2cb35bf_20250314_021336.png" },
+                { name: "김성욱", number: 47, pos: "외야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/07db972b254a477d953b3cb29550c97b_20250608_033833.png" },
+                { name: "류효승", number: 45, pos: "외야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/f53948261e2646d0b897fd021716ba75_20250314_021301.png" },
+                { name: "박정빈", number: 58, pos: "외야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/cdf83293f81a4b89bd46fcf162f9c08a_20250314_021318.png" },
+                { name: "오태곤", number: 37, pos: "외야수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/0b1a3db3c7024216b3caf14465ffc55f_20250314_021352.png" },
+            ],
+
+            standings: [
+                { rank: 1, team: "LG", w: 66, l: 42, pct: .611 },
+                { rank: 2, team: "한화", w: 62, l: 42, pct: .596 },
+                { rank: 3, team: "롯데", w: 58, l: 49, pct: .542 },
+                { rank: 4, team: "SSG", w: 54, l: 49, pct: .524 },
+                { rank: 5, team: "KIA", w: 51, l: 50, pct: .505 },
+                { rank: 6, team: "KT", w: 54, l: 53, pct: .505 },
+                { rank: 7, team: "NC", w: 49, l: 49, pct: .500 },
+                { rank: 8, team: "삼성", w: 51, l: 56, pct: .477 },
+                { rank: 9, team: "두산", w: 45, l: 59, pct: .433 },
+                { rank: 10, team: "키움", w: 33, l: 74, pct: .308 },
+            ],
+
+            stats: {
+                hitters: [
+                    { rank: 1, name: "에레디아", team: "SSG", avg: .314, hr: 7, rbi: 29 },
+                    { rank: 2, name: "한유섬", team: "SSG", avg: .275, hr: 12, rbi: 49 },
+                    { rank: 3, name: "고명준", team: "SSG", avg: .268, hr: 9, rbi: 44 },
+                ],
+                pitchers: [
+                    { rank: 1, name: "조병현", team: "SSG", era: 1.24, so: 59, w: 5 },
+                    { rank: 2, name: "이로운", team: "SSG", era: 1.61, so: 53, w: 4 },
+                    { rank: 3, name: "김택형", team: "SSG", era: 2.19, so: 9, w: 0 },
+                ]
+            },
+
+            goods: [
+                { name: "홈 유니폼", price: "₩209,000", img: "https://d2m8aeosqcrw48.cloudfront.net/erp/shop/df451e6e-9fd5-4b9f-9ecd-e48537bdfd4a20250321.jpg" },
+                { name: "볼캡", price: "₩50,000", img: "https://d2m8aeosqcrw48.cloudfront.net/erp/shop/4db8aff6-41c3-41de-b930-71b3ad4ad00720250321.jpg" },
+                { name: "응원배트", price: "₩9,000", img: "https://d2m8aeosqcrw48.cloudfront.net/erp/shop/f302fc06-3822-450d-9419-7af65a01356020250527.jpg" },
+                { name: "응원머리띠", price: "₩19,900", img: "https://d2m8aeosqcrw48.cloudfront.net/erp/shop/55dd6480-0634-43b4-b556-57af8489cc9d20250516.png" },
+            ],
+            foods: [
+                { name: "참숯한우천국", type: "소고기구이", link: "https://map.naver.com/p/search/%EC%B0%B8%EC%88%AF%ED%95%9C%EC%9A%B0%EC%B2%9C%EA%B5%AD?c=15.00,0,0,0,dh" },
+                { name: "맑은바다해물칼국수", type: "칼국수, 만두", link: "https://map.naver.com/p/entry/place/1026701408?c=14.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202508140938&locale=ko&svcName=map_pcv5" },
+                { name: "마누라쥑이기풍천장어", type: "해물, 생선요리", link: "https://map.naver.com/p/entry/place/19856571?c=14.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202508140939&locale=ko&svcName=map_pcv5" },
+            ],
+        };
+
+        /* ---------- 공용 렌더 유틸 ---------- */
+        const el = html => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
+        function setTheme() {
+            if (team.colors?.accent) document.documentElement.style.setProperty('--accent', team.colors.accent);
+            if (team.colors?.accent2) document.documentElement.style.setProperty('--accent-2', team.colors.accent2);
+            document.documentElement.style.setProperty('--wm-url', `url('${team.logo}')`);
+        }
+        function renderHeader() {
+            document.getElementById('hero-logo').src = team.logo;
+            document.getElementById('hero-title').textContent = team.name;
+            document.getElementById('hero-sub').textContent = `${team.slogan} · ${team.home} · ${team.founded}`;
+        }
+        function scrollToSection(id) {
+            if (id === 'sec-overview') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+            const t = document.getElementById(id); if (!t) return;
+            const y = t.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+        function setActiveInRemote(targetId) {
+            document.querySelectorAll('#remote .remote-item').forEach(b => b.classList.toggle('active', b.dataset.target === targetId));
+        }
+
+        // 클릭 즉시 하이라이트 + 잠시 스크롤 동기화 OFF (지도 클릭 문제 해결)
+        let suppressSync = false, suppressTimer = null;
+
+        function renderRemote() {
+            const nav = document.getElementById('remote');
+            const ICON = { 'sec-overview': '🏠', 'sec-players': '👥', 'sec-stand': '📊', 'sec-stats': '📈', 'sec-goods': '🛍️', 'sec-food': '🍜', 'sec-map': '🗺️' };
+            const LABEL = id => ({ 'sec-overview': '개요', 'sec-players': '선수', 'sec-stand': '순위표', 'sec-stats': '개인기록', 'sec-goods': '굿즈', 'sec-food': '맛집', 'sec-map': '지도' }[id] || id);
+            const groups = [
+                { title: '정보', items: ['sec-overview', 'sec-players'] },   // 응원가 제거
+                { title: '기록', items: ['sec-stand', 'sec-stats'] },
+                { title: '기타', items: ['sec-goods', 'sec-food', 'sec-map'] },
+            ];
+
+            nav.innerHTML = `
+        <div class="remote-header"><img src="${team.logo}" alt=""><div class="t"><strong>${team.name}</strong><span>${team.home}</span></div></div>
+        <div class="remote-list" id="remote-list"></div>
+        <div class="remote-footer"><a href="${team.links?.home || '#'}" target="_blank" rel="noopener"><span class="ico">🌐</span><span class="label">공식사이트</span></a></div>`;
+
+            const list = nav.querySelector('#remote-list');
+            groups.forEach(g => {
+                list.appendChild(el(`<div class="remote-group">${g.title}</div>`));
+                g.items.forEach(id => {
+                    const btn = el(`<button class="remote-item" data-target="${id}"><span class="ico">${ICON[id] || '•'}</span><span class="label">${LABEL(id)}</span></button>`);
+                    btn.addEventListener('click', () => {
+                        setActiveInRemote(id);                  // 즉시 하이라이트
+                        suppressSync = true; clearTimeout(suppressTimer);
+                        suppressTimer = setTimeout(() => suppressSync = false, 900);  // 잠시 동기화 멈춤
+                        scrollToSection(id);                    // 스무스 스크롤
+                    });
+                    list.appendChild(btn);
+                });
+            });
+
+            const io = new IntersectionObserver((es) => {
+                if (suppressSync) return;
+                es.forEach(e => { if (e.isIntersecting) setActiveInRemote(e.target.id); });
+            }, { threshold: .5, rootMargin: "-10% 0px -35% 0px" });
+            document.querySelectorAll('.section').forEach(sec => io.observe(sec));
+
+            const first = list.querySelector('.remote-item'); if (first) first.classList.add('active');
+        }
+
+        function renderOverview() {
+            document.getElementById('sec-overview').innerHTML = `
+        <h2>구단 정보</h2>
+        <div class="grid-2">
+          <div class="card" style="padding:14px"><div class="muted">연고지</div><div>${team.home}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">창단</div><div>${team.founded}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">구장</div><div>${team.stadium.name}</div></div>
+          <div class="card" style="padding:14px"><div class="muted">슬로건</div><div>${team.slogan}</div></div>
+        </div>`;
+        }
+        // (응원가 렌더 함수 제거)
+
+        function renderPlayers() {
+            document.getElementById('sec-players').innerHTML = `
+        <h2>선수 프로필</h2>
+        <div class="cards">
+          ${team.players.map(p => `
+            <div class="card item">
+              <img src="${p.img}" alt="${p.name}" />
+              <div class="meta"><div><div style="font-weight:700">${p.name}</div><div class="muted">${p.pos}</div></div><span class="badge">${p.number}</span></div>
+            </div>`).join('')}
+        </div>`;
+        }
+
+        function renderStandings() {
+            const rows = team.standings.map(s => `
+        <tr class="${s.team === team.abbr ? 'hl-team' : ''}">
+          <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
+        </tr>`).join('');
+            document.getElementById('sec-stand').innerHTML = `
+        <h2>구단 순위</h2>
+        <table class="card standings">
+          <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+        }
+
+        function renderStats() {
+            document.getElementById('sec-stats').innerHTML = `
+        <h2>개인기록</h2>
+        <div class="row">
+          <div class="card" style="padding:12px">
+            <h3 style="margin:8px 0 6px">타자 TOP</h3>
+            <table>
+              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr></thead>
+              <tbody>${team.stats.hitters.map(h => `<tr><td>${h.rank}</td><td>${h.name}</td><td>${h.team}</td><td>${h.avg.toFixed(3)}</td><td>${h.hr}</td><td>${h.rbi}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>
+          <div class="card" style="padding:12px">
+            <h3 style="margin:8px 0 6px">투수 TOP</h3>
+            <table>
+              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr></thead>
+              <tbody>${team.stats.pitchers.map(p => `<tr><td>${p.rank}</td><td>${p.name}</td><td>${p.team}</td><td>${p.era.toFixed(2)}</td><td>${p.so}</td><td>${p.w}</td></tr>`).join('')}</tbody>
+            </table>
+          </div>
+        </div>`;
+        }
+
+        function renderGoods() {
+            document.getElementById('sec-goods').innerHTML = `
+        <h2>굿즈 소개</h2>
+        <div class="cards">
+          ${team.goods.map(g => `
+            <div class="card item">
+              <img src="${g.img}" alt="${g.name}" />
+              <div class="meta"><div>${g.name}</div><span class="badge">${g.price}</span></div>
+            </div>`).join('')}
+        </div>`;
+        }
+
+        function renderFoods() {
+            document.getElementById('sec-food').innerHTML = `
+        <h2>주변 맛집</h2>
+        <table class="card">
+          <thead><tr><th>상호</th><th>종류</th><th>링크</th></tr></thead>
+          <tbody>${team.foods.map(r => `<tr><td>${r.name}</td><td>${r.type}</td><td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td></tr>`).join('')}</tbody>
+        </table>`;
+        }
+
+        function renderMap() {
+            const src = `https://www.google.com/maps?q=${encodeURIComponent(team.stadium.mapQuery)}&output=embed`;
+            document.getElementById('sec-map').innerHTML = `
+        <h2>구장 위치 — ${team.stadium.name}</h2>
+        <div class="media card"><iframe loading="lazy" src="${src}" title="지도"></iframe></div>`;
+        }
+
+        /* 실행 */
+        setTheme(); renderHeader(); renderRemote();
+        renderOverview(); renderPlayers(); renderStandings(); renderStats(); renderGoods(); renderFoods(); renderMap();
+    </script>
+</body>
+
+</html>
