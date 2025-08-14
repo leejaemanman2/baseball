@@ -165,56 +165,22 @@
                 height: 160px;
             }
         }
-
-        /* === 좌상단 게시판 버튼 === */
-        :root {
-            /* 중앙 로고 실제 표시 높이(≈200px*1.12=224px)의 약 2/3 → 약 150px */
-            --board-btn-h: 260px;
-        }
-
-        .board-fab {
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 1000;
-            /* 페이지 최상단에 보이게 */
-        }
-
-        .board-fab a {
-            display: block;
-            height: var(--board-btn-h);
-            width: auto;
-            /* 비율 유지 */
-        }
-
-        .board-fab img {
-            display: block;
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-            background: #fff;
-            /* 투명 PNG 대비 */
-            padding: 8px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .board-fab a:hover img,
-        .board-fab a:focus-visible img {
-            transform: scale(1.04);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, .16);
-        }
-
-        .board-fab a:focus-visible {
-            outline: 2px solid #333;
-            outline-offset: 4px;
-        }
     </style>
     <!-- ▲▲ 커스텀 CSS 끝 ▲▲ -->
 </head>
 
 <body>
+    <!-- 상단 우측: 게시판 + 용어 사전 버튼 (가로 정렬) -->
+    <nav class="top-actions" aria-label="빠른 이동">
+        <a href="board.html" aria-label="게시판으로 이동" title="게시판">
+            <img src="https://cdn.mediaus.co.kr/news/photo/201301/31170_66251_5040.jpg" alt="게시판">
+        </a>
+        <a href="dictionary.html" aria-label="용어 사전으로 이동" title="용어 사전">
+            <img src="https://i.namu.wiki/i/rz138i6CeWO4-3JKUJ7glQpWRSk0P7JTbC6KaRmmBItim1yXaXnVgBlIyI03tlN5SxZ3kalOK9SfXaEtV2MDzg.svg"
+                alt="용어 사전">
+        </a>
+    </nav>
+
     <div class="container mt-5">
         <h1 class="text-center mb-4">KBO 리그 구단</h1>
 
