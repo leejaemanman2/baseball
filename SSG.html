@@ -5,6 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>구단 상세 | SSG 랜더스</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         :root {
             --bg: #0b0c10;
@@ -35,16 +39,26 @@
             scroll-behavior: smooth
         }
 
-        body {
+         body {
             margin: 0;
             font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Malgun Gothic;
             color: var(--text);
-            /* 팀 컬러 틴트 배경 */
-            background: linear-gradient(180deg,
-                    color-mix(in srgb, var(--accent) 10%, #0a0b10),
-                    color-mix(in srgb, var(--accent) 6%, #0e1117) 50%,
-                    color-mix(in srgb, var(--accent) 10%, #0a0b10));
+            /* 전체 배경: 이미지 없이 그라디언트만 */
+            background: linear-gradient(180deg, #0b0c10 0%,
+                    color-mix(in srgb, var(--accent) 8%, #0d1117) 35%,
+                    #0d1117 55%,
+                    color-mix(in srgb, var(--accent) 8%, #0b0c10) 100%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
+
+        @supports not (background:color-mix(in srgb, rgb(217, 255, 0) 10%, black)) {
+            body {
+                background: linear-gradient(180deg, #0b0c10 0%, #11151c 35%, #0d1117 55%, #0b0c10 100%)
+            }
+        }
+
 
         a {
             color: inherit
@@ -85,11 +99,18 @@
             margin-bottom: 10px
         }
 
-        .card,
-        .hero {
+         .hero,
+        .card {
             border: 1px solid #22252b;
             border-radius: var(--radius);
-            box-shadow: var(--shadow)
+            box-shadow: var(--shadow);
+            margin-top: 12px;
+        }
+
+        .card {
+            padding: 18px;
+            background: color-mix(in srgb, var(--panel) 78%, transparent);
+            backdrop-filter: blur(2px);
         }
 
         .hero {
@@ -329,20 +350,25 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            overflow: hidden;
-            border-radius: 12px
         }
 
-        thead {
-            background: #0f1320
-        }
-
-        th,
-        td {
+        table th,
+        table td {
             font-size: 14px;
             padding: 10px 12px;
+            color: var(--text) !important;
+            background-color: transparent !important;
             border-bottom: 1px solid #232630;
-            text-align: left
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        table td:nth-child(2) {
+            text-align: left;
+        }
+
+        table thead {
+            background-color: #0f1320;
         }
 
         tbody tr:hover {
@@ -391,23 +417,33 @@
             font-size: 12px
         }
 
+        .pill:hover {
+            color: var(--text);
+            border-color: var(--muted);
+        }
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px
         }
 
+        .grid-2 .card {
+            padding: 14px;
+            margin-top: 0;
+        }
+
         .media {
-            position: relative;
-            overflow: hidden;
+            padding: 0;
+            background: #000;
             border-radius: 12px;
-            background: #000
         }
 
         .media iframe {
+            display: block;
             width: 100%;
             height: 360px;
-            border: 0
+            border: 0;
         }
 
         /* 순위표 하이라이트(해당 팀) */
@@ -444,6 +480,20 @@
 
         #player {
             display: none;
+        }
+
+        /* color-mix 미지원 폴백 */
+        @supports not (background: color-mix(in srgb, red 10%, transparent)) {
+
+            .hero,
+            .card {
+                background: rgba(21, 23, 28, .78);
+            }
+
+            .hero {
+                background:
+                    linear-gradient(90deg, rgba(192, 0, 0, .18), rgba(0, 0, 0, 0) 60%), rgba(21, 23, 28, .78);
+            }
         }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -536,6 +586,8 @@
 
                 { name: "김광현", number: 29, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/911728ef39644966b0f7727b0f34771d_20250314_022735.png" },
                 { name: "김택형", number: 43, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/706a09c29d554d2ea8be5e04239b8018_20250314_022806.png" },
+                { name: "김민", number: 41, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/1431e0ea44bf4533a7499cc1f31c44f7_20250314_022744.png" },
+                { name: "드류 앤더슨", number: 33, pos: "투수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/455ca4bf692148ae9e1c24fdb88ef3c5_20250314_023201.png" },
 
                 { name: "김민식", number: 24, pos: "포수", img: "https://ssg-new-prod.s3.ap-northeast-2.amazonaws.com/erp/player/c1196e9bc4d5492cab150b2413ec6021_20250314_023533.png" },
 
@@ -666,50 +718,106 @@
         }
         // (응원가 렌더 함수 제거)
 
+        /* 선수 캐러셀(유지) */
         function renderPlayers() {
-            document.getElementById('sec-players').innerHTML = `
-        <h2>선수 프로필</h2>
-        <div class="cards">
-          ${team.players.map(p => `
+            const host = document.getElementById('sec-players');
+            const players = team.players;
+            const chunkSize = 4;
+            const numChunks = Math.ceil(players.length / chunkSize);
+
+            let indicatorsHtml = '';
+            for (let i = 0; i < numChunks; i++) {
+                indicatorsHtml += `<button type="button" data-bs-target="#playerCarousel" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></button>`;
+            }
+
+            let slidesHtml = '';
+            for (let i = 0; i < players.length; i += chunkSize) {
+                const chunk = players.slice(i, i + chunkSize);
+                const isActive = i === 0 ? 'active' : '';
+                slidesHtml += `<div class="carousel-item ${isActive}"><div class="row g-3">`;
+                slidesHtml += chunk.map(p => `
+          <div class="col">
             <div class="card item">
               <img src="${p.img}" alt="${p.name}" />
-              <div class="meta"><div><div style="font-weight:700">${p.name}</div><div class="muted">${p.pos}</div></div><span class="badge">${p.number}</span></div>
-            </div>`).join('')}
+              <div class="meta">
+                <div><div style="font-weight:700">${p.name}</div><div class="muted">${p.pos}</div></div>
+                <span class="badge">${p.number}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+                slidesHtml += `</div></div>`;
+            }
+
+            host.innerHTML = `
+        <h2>선수 프로필</h2>
+        <div id="playerCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">${indicatorsHtml}</div>
+          <div class="carousel-inner">${slidesHtml}</div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#playerCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+          <button class="carousel-control-next" type="button" data-bs-target="#playerCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
         </div>`;
         }
 
         function renderStandings() {
-            const rows = team.standings.map(s => `
-        <tr class="${s.team === team.abbr ? 'hl-team' : ''}">
-          <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
-        </tr>`).join('');
-            document.getElementById('sec-stand').innerHTML = `
-        <h2>구단 순위</h2>
-        <table class="card standings">
-          <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+            const key = team.name.split(' ')[0]; // "한화" 같이 팀명의 첫 단어로 매칭
+            document.getElementById('sec-stand').innerHTML =
+                `<h2>구단 순위</h2>
+         <table class="standings">
+           <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
+           <tbody>
+             ${team.standings.map(s => `
+               <tr class="${(s.team === team.name || s.team.includes(key)) ? 'hl-team' : ''}">
+                 <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
+               </tr>`).join('')}
+           </tbody>
+         </table>`;
         }
 
         function renderStats() {
             document.getElementById('sec-stats').innerHTML = `
-        <h2>개인기록</h2>
-        <div class="row">
-          <div class="card" style="padding:12px">
-            <h3 style="margin:8px 0 6px">타자 TOP</h3>
-            <table>
-              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr></thead>
-              <tbody>${team.stats.hitters.map(h => `<tr><td>${h.rank}</td><td>${h.name}</td><td>${h.team}</td><td>${h.avg.toFixed(3)}</td><td>${h.hr}</td><td>${h.rbi}</td></tr>`).join('')}</tbody>
-            </table>
-          </div>
-          <div class="card" style="padding:12px">
-            <h3 style="margin:8px 0 6px">투수 TOP</h3>
-            <table>
-              <thead><tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr></thead>
-              <tbody>${team.stats.pitchers.map(p => `<tr><td>${p.rank}</td><td>${p.name}</td><td>${p.team}</td><td>${p.era.toFixed(2)}</td><td>${p.so}</td><td>${p.w}</td></tr>`).join('')}</tbody>
-            </table>
-          </div>
-        </div>`;
+      <h2>개인기록</h2>
+      <div class="row">
+        <div class="card" style="padding:12px">
+          <h3 style="margin:8px 0 6px">타자 TOP</h3>
+          <table>
+            <thead>
+              <tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr>
+            </thead>
+            <tbody>
+              ${team.stats.hitters.map(h => `
+                <tr>
+                  <td>${h.rank}</td>
+                  <td>${h.name}</td>
+                  <td>${h.team}</td>
+                  <td>${h.avg.toFixed(3)}</td>
+                  <td>${h.hr}</td>
+                  <td>${h.rbi}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="padding:12px">
+          <h3 style="margin:8px 0 6px">투수 TOP</h3>
+          <table>
+            <thead>
+              <tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr>
+            </thead>
+            <tbody>
+              ${team.stats.pitchers.map(p => `
+                <tr>
+                  <td>${p.rank}</td>
+                  <td>${p.name}</td>
+                  <td>${p.team}</td>
+                  <td>${p.era.toFixed(2)}</td>
+                  <td>${p.so}</td>
+                  <td>${p.w}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
         }
 
         function renderGoods() {
@@ -725,12 +833,24 @@
         }
 
         function renderFoods() {
-            document.getElementById('sec-food').innerHTML = `
-        <h2>주변 맛집</h2>
-        <table class="card">
-          <thead><tr><th>상호</th><th>종류</th><th>링크</th></tr></thead>
-          <tbody>${team.foods.map(r => `<tr><td>${r.name}</td><td>${r.type}</td><td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td></tr>`).join('')}</tbody>
-        </table>`;
+            document.getElementById('sec-food').innerHTML =
+                `<h2>주변 맛집</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>상호</th>
+                <th>종류</th>
+                <th>링크</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${team.foods.map(r => `<tr>
+                <td>${r.name}</td>
+                <td>${r.type}</td>
+                <td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td>
+            </tr>`).join('')}
+        </tbody>
+    </table>`;
         }
 
         function renderMap() {
@@ -747,4 +867,3 @@
 </body>
 
 </html>
-
