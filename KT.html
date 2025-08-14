@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 
-    
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -469,16 +469,16 @@
             window.ytPlayer = new YT.Player('player', {
                 height: '0',
                 width: '0',
-                videoId: 'vcIzm0wvO90',
+                videoId: 'bsWBORqEjpI',
                 playerVars: {
                     autoplay: 1,
                     loop: 1,
-                    playlist: 'vcIzm0wvO90',
+                    playlist: 'bsWBORqEjpI',
                     // mute 옵션은 playerVars에 없음
                 },
                 events: {
                     onReady: (event) => {
-                        console.log('플레이어 준비 완료');
+                        console.log('플레이어 a준비 완료');
                         event.target.mute();  // 음소거 초기 설정
                         readyToPlay = true;
                     }
@@ -751,5 +751,3 @@
 </body>
 
 </html>
-
-
