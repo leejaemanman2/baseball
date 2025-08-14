@@ -42,10 +42,8 @@
             max-width: 1100px;
             margin: 0 auto;
             padding: 24px 16px 96px;
-            /* 아래 여백은 FAB 여유 */
         }
 
-        /* 헤더: 좌측 프로젝트 제목 + 우측(아니라 요청대로 좌측 옆) 검색 */
         .board-header {
             display: flex;
             align-items: center;
@@ -67,7 +65,7 @@
         .board-title h1 {
             font-size: 20px;
             font-weight: 700;
-            letter-spacing: 0.2px;
+            letter-spacing: .2px;
             color: #eaf2ff;
             margin: 0;
             white-space: nowrap;
@@ -114,7 +112,6 @@
             border: 1px solid #283046;
         }
 
-        /* 상단 카테고리/유틸 영역 */
         .toolbar {
             display: flex;
             align-items: center;
@@ -130,7 +127,6 @@
             gap: 8px;
         }
 
-        /* 목록 테이블 (DC 느낌) */
         .board-table {
             width: 100%;
             border-collapse: collapse;
@@ -216,7 +212,6 @@
             margin-right: 6px;
         }
 
-        /* 페이지네이션 */
         .pagination-wrap {
             display: flex;
             justify-content: center;
@@ -240,7 +235,6 @@
             border-color: #39518c;
         }
 
-        /* 우하단 고정 스크롤 버튼 */
         .scroll-fab {
             position: fixed;
             right: 20px;
@@ -275,8 +269,7 @@
             transform: translateY(0);
         }
 
-        /* 반응형 */
-        @media (max-width: 768px) {
+        @media (max-width:768px) {
             .col-author {
                 display: none;
             }
@@ -370,7 +363,7 @@
 
 <body>
     <div class="container-narrow">
-        <!-- 헤더: 프로젝트 제목(좌측) + 검색 박스(그 옆) -->
+        <!-- 헤더: 프로젝트 제목 + 검색 -->
         <div class="board-header">
             <div class="board-title">
                 <h1>KBO 구단 커뮤니티</h1>
@@ -385,12 +378,7 @@
         </div>
 
         <div class="toolbar">
-            <div class="toolbar-left">
-                <!-- <span class="chip">전체</span>
-                <span class="chip">자유</span>
-                <span class="chip">응원</span>
-                <span class="chip">직관후기</span> -->
-            </div>
+            <div class="toolbar-left"></div>
             <div class="toolbar-right">
                 <button class="btn" id="btnWrite" type="button">글쓰기</button>
             </div>
@@ -408,15 +396,11 @@
                     <th class="col-reco">추천</th>
                 </tr>
             </thead>
-            <tbody id="tbodyPosts">
-                <!-- JS가 채움 -->
-            </tbody>
+            <tbody id="tbodyPosts"></tbody>
         </table>
 
         <!-- 페이지네이션 -->
-        <div class="pagination-wrap" id="pagination">
-            <!-- JS가 채움 -->
-        </div>
+        <div class="pagination-wrap" id="pagination"></div>
     </div>
 
     <!-- 글쓰기 모달 -->
@@ -469,7 +453,7 @@
     </div>
 
     <script>
-        // ===== 게시판 스크립트 (최근 작성일 순 정렬 + 모달 글쓰기) =====
+        // ===== 게시판 스크립트 (최근 작성일 순 정렬 + 모달 글쓰기 + 내 글 삭제) =====
         const STORAGE_KEY = 'userPosts';
 
         const twoDigit = n => String(n).padStart(2, '0');
@@ -490,14 +474,33 @@
                 return Array.isArray(arr) ? arr : [];
             } catch (e) { return []; }
         };
+
         const saveUserPost = (post) => {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
                 const arr = raw ? JSON.parse(raw) : [];
-                Array.isArray(arr) ? arr.unshift(post) : null;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.isArray(arr) ? arr : [post]));
+                if (Array.isArray(arr)) {
+                    arr.unshift(post);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+                } else {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([post]));
+                }
             } catch (e) {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify([post]));
+            }
+        };
+
+        // ★ 추가: 로컬에 저장된 내 글 삭제(ts 기준)
+        const removeUserPost = (ts) => {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            try {
+                const arr = JSON.parse(raw);
+                const next = Array.isArray(arr) ? arr.filter(p => p.ts !== ts) : [];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+            } catch (e) {
+                // 파싱 오류 시 안전하게 초기화
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
             }
         };
 
@@ -526,7 +529,6 @@
         ];
 
         const state = { all: [], page: 1, size: 15, q: '' };
-
         const $ = sel => document.querySelector(sel);
         const $$ = sel => Array.from(document.querySelectorAll(sel));
 
@@ -561,9 +563,13 @@
             }
 
             for (const p of items) {
+                const isMine = (p.no === null); // 내가 쓴 글(로컬 저장)
+                const delBtn = isMine
+                    ? `<button class="btn" data-del-ts="${p.ts}" style="margin-left:8px;padding:4px 8px;font-size:12px;">삭제</button>`
+                    : '';
                 rows.push(`<tr>
           <td class="col-no">${(p.no !== undefined && p.no !== null) ? p.no : '신규'}</td>
-          <td class="col-title"><a href="#" class="title-link">${p.title}</a></td>
+          <td class="col-title"><a href="#" class="title-link">${p.title}</a>${delBtn}</td>
           <td class="col-author">${p.author ?? '익명'}</td>
           <td class="col-date">${p.date ?? ''}</td>
           <td class="col-views">${(p.views ?? 0).toLocaleString()}</td>
@@ -644,7 +650,7 @@
                 if (!content) { alert('내용을 입력하세요.'); return; }
                 const ts = Date.now();
                 const post = {
-                    no: null,
+                    no: null, // 로컬 작성글 식별
                     title: category ? `[${category}] ${title}` : title,
                     author,
                     content,
@@ -665,6 +671,21 @@
             // 스크롤 버튼
             document.getElementById('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
             document.getElementById('toBottom').addEventListener('click', () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }));
+
+            // ★ 목록에서 삭제(내 글만) — 이벤트 위임
+            document.getElementById('tbodyPosts').addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-del-ts]');
+                if (!btn) return;
+                const ts = Number(btn.dataset.delTs);
+                if (!Number.isFinite(ts)) return;
+                if (!confirm('이 글을 삭제할까요?')) return;
+
+                // localStorage에서 제거
+                removeUserPost(ts);
+                // 화면 상태에서도 제거
+                state.all = state.all.filter(p => !(p.no === null && p.ts === ts));
+                render();
+            });
 
             render();
         })();
