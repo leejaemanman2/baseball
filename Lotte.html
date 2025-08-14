@@ -41,7 +41,20 @@
             margin: 0;
             font-family: system-ui, -apple-system, Segoe UI, Roboto, Apple SD Gothic Neo, Malgun Gothic;
             color: var(--text);
-            background: linear-gradient(180deg, #0a0b10, #0e1117 50%, #0a0b10);
+            /* 전체 배경: 이미지 없이 그라디언트만 */
+            background: linear-gradient(180deg, #0b0c10 0%,
+                    color-mix(in srgb, var(--accent) 8%, #0d1117) 35%,
+                    #0d1117 55%,
+                    color-mix(in srgb, var(--accent) 8%, #0b0c10) 100%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        @supports not (background:color-mix(in srgb, rgb(217, 255, 0) 10%, black)) {
+            body {
+                background: linear-gradient(180deg, #0b0c10 0%, #11151c 35%, #0d1117 55%, #0b0c10 100%)
+            }
         }
 
         a {
@@ -68,10 +81,10 @@
             background:
                 radial-gradient(1100px 520px at 18% -12%, rgba(255, 255, 255, .06), transparent 70%),
                 radial-gradient(900px 520px at 85% 112%, rgba(255, 255, 255, .04), transparent 70%),
-                var(--wm-url) no-repeat center 50%;
+                var(--wm-url) no-repeat center 55%;
             background-size: clamp(420px, 30vw, 500px) auto;
             opacity: .10;
-            filter: grayscale(1) contrast(1.05);
+            
         }
 
         .container {
@@ -127,7 +140,23 @@
             object-fit: contain;
             background: #000;
         }
+.remote-header .t {
+            line-height: 1.1
+        }
 
+        .remote-header .t strong {
+            display: block;
+            font-size: 14px
+        }
+
+        /* 팀명 (굵게) */
+        .remote-header .t span {
+            display: block;
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        /* 연고지 (작게) */
         .remote-list {
             padding: 8px;
             overflow: auto;
@@ -221,7 +250,7 @@
             }
 
             .side-remote {
-                position: fixed;
+                
                 left: 50%;
                 top: auto;
                 bottom: 16px;
@@ -273,9 +302,18 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 18px 22px;
+            padding: 40px 22px;
             margin: 16px 0;
-            background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, #0f1117), #0f1117 60%);
+            background:
+                linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, transparent), transparent 60%),
+                color-mix(in srgb, var(--panel) 78%, transparent);
+            backdrop-filter: blur(2px);
+        }
+
+        .card {
+            padding: 18px;
+            background: color-mix(in srgb, var(--panel) 78%, transparent);
+            backdrop-filter: blur(2px);
         }
 
         .hero .logo {
@@ -298,9 +336,7 @@
             font-size: 14px
         }
 
-        .card {
-            padding: 18px;
-        }
+
 
         .cards {
             display: grid;
@@ -327,10 +363,10 @@
             margin-top: 8px;
         }
 
-        .badge {
+        .badge {    
             font-size: 12px;
-            color: #111;
-            background: linear-gradient(45deg, var(--accent), var(--accent-2));
+            color: white;
+            background-color: #041E42;
             padding: 4px 8px;
             border-radius: 999px;
         }
@@ -362,7 +398,24 @@
         tbody tr:hover {
             background: #0e1017;
         }
+/* 자기 팀 하이라이트 */
+        table.standings tr.hl-team {
+            background: color-mix(in srgb, var(--accent) 18%, transparent);
+        }
 
+        table.standings tr.hl-team:hover {
+            background: color-mix(in srgb, var(--accent) 28%, transparent);
+        }
+
+        @supports not (background:color-mix(in srgb, red 10%, transparent)) {
+            table.standings tr.hl-team {
+                background: rgba(192, 0, 0, .14);
+            }
+
+            table.standings tr.hl-team:hover {
+                background: rgba(192, 0, 0, .22);
+            }
+        }
         .pill {
             display: inline-block;
             padding: 6px 10px;
@@ -401,9 +454,7 @@
             border: 0;
         }
 
-        #playerCarousel .card {
-            margin-top: 0;
-        }
+        
 
         html,
         body {
@@ -421,13 +472,26 @@
         #player {
             display: none;
         }
-    </style>
+/* color-mix 미지원 폴백 */
+        @supports not (background: color-mix(in srgb, red 10%, transparent)) {
+
+            .hero,
+            .card {
+                background: rgba(21, 23, 28, .78);
+            }
+
+            .hero {
+                background:
+                    linear-gradient(90deg, rgba(192, 0, 0, .18), rgba(0, 0, 0, 0) 60%), rgba(21, 23, 28, .78);
+            }
+        }   
+         </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 
 </head>
 
 <body>
-
+    <!-- BGM: 원본 그대로 유지 -->
     <div id="overlay"></div>
     <div id="player"></div>
 
@@ -449,36 +513,14 @@
 
         function onYouTubeIframeAPIReady() {
             window.ytPlayer = new YT.Player('player', {
-                height: '0',
-                width: '0',
-                videoId: 'K9xm7kaV6MA',
-                playerVars: {
-                    autoplay: 1,
-                    loop: 1,
-                    playlist: 'K9xm7kaV6MA',
-                    // mute 옵션은 playerVars에 없음
-                },
-                events: {
-                    onReady: (event) => {
-                        console.log('플레이어 준비 완료');
-                        event.target.mute();  // 음소거 초기 설정
-                        readyToPlay = true;
-                    }
-                }
+                height: '0', width: '0', videoId: '9j-6LtiEQJY',
+                playerVars: { autoplay: 1, loop: 1, playlist: '9j-6LtiEQJY' },
+                events: { onReady: (event) => { event.target.mute(); readyToPlay = true; } }
             });
         }
         function playMusicOnce() {
-            if (!readyToPlay) {
-                console.log('플레이어 준비 중이라 재생 대기');
-                return;
-            }
-
-            if (window.ytPlayer && !playerStarted) {
-                window.ytPlayer.unMute();
-                window.ytPlayer.playVideo();
-                playerStarted = true;
-                console.log('음악 재생 시작');
-            }
+           if (!readyToPlay) return;
+            if (window.ytPlayer && !playerStarted) { ytPlayer.unMute(); ytPlayer.playVideo(); playerStarted = true; }
         }
 
         document.getElementById('overlay').addEventListener('click', playMusicOnce);
@@ -515,9 +557,16 @@
                 { name: "승리의통닭", type: "치킨", link: "https://map.kakao.com/link/to/승리의통닭,35.1936,129.0617" },
             ],
             standings: [
-                { rank: 1, team: "한화 이글스", w: 52, l: 33, pct: .612 },
-                { rank: 2, team: "LG 트윈스", w: 50, l: 36, pct: .581 },
-                { rank: 3, team: "롯데 자이언츠", w: 47, l: 39, pct: .547 },
+                { rank: 1, team: "LG", w: 66, l: 42, pct: .611 },
+                { rank: 2, team: "한화", w: 62, l: 42, pct: .596 },
+                { rank: 3, team: "롯데", w: 58, l: 49, pct: .542 },
+                { rank: 4, team: "SSG", w: 54, l: 49, pct: .524 },
+                { rank: 5, team: "KIA", w: 51, l: 50, pct: .505 },
+                { rank: 6, team: "KT", w: 54, l: 53, pct: .505 },
+                { rank: 7, team: "NC", w: 49, l: 49, pct: .500 },
+                { rank: 8, team: "삼성", w: 51, l: 56, pct: .477 },
+                { rank: 9, team: "두산", w: 45, l: 59, pct: .433 },
+                { rank: 10, team: "키움", w: 33, l: 74, pct: .308 },
             ],
             stats: {
                 hitters: [{ rank: 1, name: "디아즈", team: "삼성", avg: .311, hr: 35, rbi: 92 }, { rank: 2, name: "안현민", team: "KT", avg: .351, hr: 18, rbi: 76 }, { rank: 3, name: "레이예스", team: "롯데", avg: .327, hr: 26, rbi: 88 },],
@@ -533,8 +582,13 @@
 
         const el = html => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; };
         function setTheme() { if (team.colors?.accent) document.documentElement.style.setProperty('--accent', team.colors.accent); if (team.colors?.accent2) document.documentElement.style.setProperty('--accent-2', team.colors.accent2); document.documentElement.style.setProperty('--wm-url', `url('${team.logo}')`); }
-        function renderHeader() { const hero = document.getElementById('hero'); hero.innerHTML = `<img class="logo" alt="팀 로고" src="${team.logo}" /><div class="title"><h1>${team.name}</h1><p class="muted">${team.slogan} · ${team.home} · ${team.founded}</p></div>`; }
+        function renderHeader() {
+            const hero = document.getElementById('hero');
+            hero.innerHTML = `<img class="logo" alt="팀 로고" src="${team.logo}" />
+        <div class="title"><h1>${team.name}</h1><p class="muted">${team.slogan} · ${team.home} · ${team.founded}</p></div>`;
+        }
         function scrollToSection(id) { if (id === 'sec-overview') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; } const t = document.getElementById(id); if (!t) return; const y = t.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' }); }
+        let suppressSync = false, suppressTimer = null;
         function setActiveInRemote(targetId) { document.querySelectorAll('#remote .remote-item').forEach(b => b.classList.toggle('active', b.dataset.target === targetId)); }
         function renderRemote() {
             const nav = document.getElementById('remote');
@@ -545,22 +599,41 @@
                 { title: '기록', items: ['sec-stand', 'sec-stats'] },
                 { title: '기타', items: ['sec-goods', 'sec-food', 'sec-map'] },
             ];
-            nav.innerHTML = `<div class="remote-header"><img src="${team.logo}" alt=""><div class="t"><strong>${team.name}</strong><span>${team.home}</span></div></div><div class="remote-list" id="remote-list"></div><div class="remote-footer"><a href="${team.links?.home || '#'}" target="_blank" rel="noopener"><span class="ico">🌐</span><span class="label">공식사이트</span></a></div>`;
+            nav.innerHTML = `<div class="remote-header"><img src="${team.logo}" alt=""><div class="t"><strong>${team.name}</strong><span>${team.home}</span></div></div>
+        <div class="remote-list" id="remote-list"></div>
+        <div class="remote-footer"><a href="${team.links?.home || '#'}" target="_blank" rel="noopener"><span class="ico">🌐</span><span class="label">공식사이트</span></a></div>`;
             const list = nav.querySelector('#remote-list');
             groups.forEach(g => {
                 list.appendChild(el(`<div class="remote-group">${g.title}</div>`));
                 g.items.forEach(id => {
                     const btn = el(`<button class="remote-item" data-target="${id}"><span class="ico">${ICON[id] || '•'}</span><span class="label">${LABEL(id)}</span></button>`);
-                    btn.addEventListener('click', () => { setActiveInRemote(id); scrollToSection(id); });
+                     btn.addEventListener('click', () => {
+                        setActiveInRemote(id);
+                        suppressSync = true; clearTimeout(suppressTimer);
+                        suppressTimer = setTimeout(() => suppressSync = false, 900);
+                        scrollToSection(id);
+                    });
                     list.appendChild(btn);
                 });
             });
-            const io = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) setActiveInRemote(e.target.id); }); }, { threshold: .5, rootMargin: "-10% 0px -35% 0px" });
+            const io = new IntersectionObserver((entries) => {
+                if (suppressSync) return;
+                entries.forEach(e => { if (e.isIntersecting) setActiveInRemote(e.target.id); });
+            }, { threshold: .55, rootMargin: "-10% 0px -35% 0px" });
             document.querySelectorAll('.section').forEach(sec => io.observe(sec));
             const first = list.querySelector('.remote-item'); if (first) first.classList.add('active');
         }
-        function renderOverview() { document.getElementById('sec-overview').innerHTML = `<h2>구단 정보</h2><div class="grid-2"><div class="card"><div class="muted">연고지</div><div>${team.home}</div></div><div class="card"><div class="muted">창단</div><div>${team.founded}</div></div><div class="card"><div class="muted">구장</div><div>${team.stadium.name}</div></div><div class="card"><div class="muted">슬로건</div><div>${team.slogan}</div></div></div>`; }
-
+        function renderOverview() {
+            document.getElementById('sec-overview').innerHTML =
+                `<h2>구단 정보</h2>
+         <div class="grid-2">
+           <div class="card"><div class="muted">연고지</div><div>${team.home}</div></div>
+           <div class="card"><div class="muted">창단</div><div>${team.founded}</div></div>
+           <div class="card"><div class="muted">구장</div><div>${team.stadium.name}</div></div>
+           <div class="card"><div class="muted">슬로건</div><div>${team.slogan}</div></div>
+         </div>`;
+        }
+        /* 선수 캐러셀(유지) */
         function renderPlayers() {
             const host = document.getElementById('sec-players');
             const players = team.players;
@@ -601,18 +674,116 @@
                     <button class="carousel-control-next" type="button" data-bs-target="#playerCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
                 </div>`;
         }
-        function renderStandings() { document.getElementById('sec-stand').innerHTML = `<h2>구단 순위</h2><table><thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead><tbody>${team.standings.map(s => `<tr><td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td></tr>`).join('')}</tbody></table>`; }
-        function renderStats() { document.getElementById('sec-stats').innerHTML = `<h2>개인기록</h2><div class="grid-2"><div><h3>타자 TOP</h3><table><thead><tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr></thead><tbody>${team.stats.hitters.map(h => `<tr><td>${h.rank}</td><td>${h.name}</td><td>${h.team}</td><td>${h.avg.toFixed(3)}</td><td>${h.hr}</td><td>${h.rbi}</td></tr>`).join('')}</tbody></table></div><div><h3>투수 TOP</h3><table><thead><tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr></thead><tbody>${team.stats.pitchers.map(p => `<tr><td>${p.rank}</td><td>${p.name}</td><td>${p.team}</td><td>${p.era.toFixed(2)}</td><td>${p.so}</td><td>${p.w}</td></tr>`).join('')}</tbody></table></div></div>`; }
-        function renderGoods() { document.getElementById('sec-goods').innerHTML = `<h2>굿즈 소개</h2><div class="cards">${team.goods.map(g => `<div class="card item"><img src="${g.img}" alt="${g.name}" /><div class="meta"><div>${g.name}</div><span class="badge">${g.price}</span></div></div>`).join('')}</div>`; }
-        function renderFoods() { document.getElementById('sec-food').innerHTML = `<h2>주변 맛집</h2><table><thead><tr><th>상호</th><th>종류</th><th>링크</th></tr></thead><tbody>${team.foods.map(r => `<tr><td>${r.name}</td><td>${r.type}</td><td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td></tr>`).join('')}</tbody></table>`; }
-        function renderMap() { const src = `https://maps.google.com/maps?q=${encodeURIComponent(team.stadium.mapQuery)}&output=embed`; document.getElementById('sec-map').innerHTML = `<h2>구장 위치 — ${team.stadium.name}</h2><div class="media card"><iframe loading="lazy" src="${src}" title="지도"></iframe></div>`; }
+        function renderStandings() {
+            const key = team.name.split(' ')[0]; // 팀명의 첫 단어로 매칭
+            document.getElementById('sec-stand').innerHTML =
+                `<h2>구단 순위</h2>
+         <table class="standings">
+           <thead><tr><th>순위</th><th>팀</th><th>승</th><th>패</th><th>승률</th></tr></thead>
+           <tbody>
+             ${team.standings.map(s => `
+               <tr class="${(s.team === team.name || s.team.includes(key)) ? 'hl-team' : ''}">
+                 <td>${s.rank}</td><td>${s.team}</td><td>${s.w}</td><td>${s.l}</td><td>${s.pct.toFixed(3)}</td>
+               </tr>`).join('')}
+           </tbody>
+         </table>`;
+        }
+
+        function renderStats() {
+            document.getElementById('sec-stats').innerHTML = `
+      <h2>개인기록</h2>
+      <div class="row">
+        <div class="card" style="padding:12px">
+          <h3 style="margin:8px 0 6px">타자 TOP</h3>
+          <table>
+            <thead>
+              <tr><th>순위</th><th>선수</th><th>팀</th><th>타율</th><th>HR</th><th>RBI</th></tr>
+            </thead>
+            <tbody>
+              ${team.stats.hitters.map(h => `
+                <tr>
+                  <td>${h.rank}</td>
+                  <td>${h.name}</td>
+                  <td>${h.team}</td>
+                  <td>${h.avg.toFixed(3)}</td>
+                  <td>${h.hr}</td>
+                  <td>${h.rbi}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="padding:12px">
+          <h3 style="margin:8px 0 6px">투수 TOP</h3>
+          <table>
+            <thead>
+              <tr><th>순위</th><th>선수</th><th>팀</th><th>ERA</th><th>SO</th><th>W</th></tr>
+            </thead>
+            <tbody>
+              ${team.stats.pitchers.map(p => `
+                <tr>
+                  <td>${p.rank}</td>
+                  <td>${p.name}</td>
+                  <td>${p.team}</td>
+                  <td>${p.era.toFixed(2)}</td>
+                  <td>${p.so}</td>
+                  <td>${p.w}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+        }
+
+
+        function renderGoods() {
+            document.getElementById('sec-goods').innerHTML =
+                `<h2>굿즈 소개</h2>
+    <div class="cards">
+        ${team.goods.map(g => `
+        <div class="card item">
+            <img src="${g.img}" alt="${g.name}" />
+            <div class="meta">
+                <div>${g.name}</div><span class="badge">${g.price}</span>
+            </div>
+        </div>`).join('')}
+    </div>`;
+        }
+
+        function renderFoods() {
+            document.getElementById('sec-food').innerHTML =
+                `<h2>주변 맛집</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>상호</th>
+                <th>종류</th>
+                <th>링크</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${team.foods.map(r => `<tr>
+                <td>${r.name}</td>
+                <td>${r.type}</td>
+                <td><a class="pill" href="${r.link}" target="_blank">지도보기</a></td>
+            </tr>`).join('')}
+        </tbody>
+    </table>`;
+        }
+
+        function renderMap() {
+            const src = `https://maps.google.com/maps?q=${encodeURIComponent(team.stadium.mapQuery)}&output=embed`;
+            document.getElementById('sec-map').innerHTML =
+                `<h2>구장 위치 — ${team.stadium.name}</h2>
+    <div class="media card"><iframe loading="lazy" src="${src}" title="지도"></iframe></div>`;
+        }
 
         setTheme();
         renderHeader();
         renderRemote();
         renderOverview();
-        renderPlayers();
-        renderStandings();
+        renderPlayers(); // 캐러셀 유지
+        renderStandings(); // 자기 팀 하이라이트 적용(데이터 불변)
         renderStats();
         renderGoods();
         renderFoods();
