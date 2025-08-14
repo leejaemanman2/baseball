@@ -502,16 +502,40 @@
 
         function onYouTubeIframeAPIReady() {
             window.ytPlayer = new YT.Player('player', {
-                height: '0', width: '0', videoId: '9j-6LtiEQJY',
-                playerVars: { autoplay: 1, loop: 1, playlist: '9j-6LtiEQJY' },
-                events: { onReady: (event) => { event.target.mute(); readyToPlay = true; } }
+                height: '0',
+                width: '0',
+                videoId: 'bsWBORqEjpI',
+                playerVars: {
+                    autoplay: 1,
+                    loop: 1,
+                    playlist: 'bsWBORqEjpI',
+                    // mute 옵션은 playerVars에 없음
+                },
+                events: {
+                    onReady: (event) => {
+                        console.log('플레이어 a준비 완료');
+                        event.target.mute();  // 음소거 초기 설정
+                        readyToPlay = true;
+                    }
+                }
             });
         }
         function playMusicOnce() {
-            if (!readyToPlay) return;
-            if (window.ytPlayer && !playerStarted) { ytPlayer.unMute(); ytPlayer.playVideo(); playerStarted = true; }
+            if (!readyToPlay) {
+                console.log('플레이어 준비 중이라 재생 대기');
+                return;
+            }
+
+            if (window.ytPlayer && !playerStarted) {
+                window.ytPlayer.unMute();
+                window.ytPlayer.playVideo();
+                playerStarted = true;
+                console.log('음악 재생 시작');
+            }
         }
+
         document.getElementById('overlay').addEventListener('click', playMusicOnce);
+        // window.addEventListener('scroll', playMusicOnce, { once: true });
 
         /* ===== 데이터 ===== */
         const team = {
