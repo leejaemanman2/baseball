@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 페이지 로드 시 순위표와 개인 기록을 바로 표시
     if (document.getElementById('standingsContainer')) {
-        displayStandings();
+        initializeStandings(); // 순위 섹션 초기화 함수 호출로 변경
         initializePlayerRecords();
     }
 
@@ -12,22 +12,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function displayStandings() {
+// --- 순위 섹션 로직 ---
+
+// 정규 시즌 순위 데이터
+const regularSeasonData = [
+    { rank: 1, team: 'LG', games: 110, win: 66, loss: 42, draw: 2, pct: 0.611, gamesBehind: 0, lastTen: '8승0무2패', streak: '1승' },
+    { rank: 2, team: '한화', games: 107, win: 62, loss: 42, draw: 3, pct: 0.596, gamesBehind: 2, lastTen: '5승0무5패', streak: '2승' },
+    { rank: 3, team: '롯데', games: 110, win: 58, loss: 49, draw: 3, pct: 0.542, gamesBehind: 7.5, lastTen: '4승0무6패', streak: '4패' },
+    { rank: 4, team: 'SSG', games: 107, win: 54, loss: 49, draw: 4, pct: 0.524, gamesBehind: 9.5, lastTen: '7승0무3패', streak: '3승' },
+    { rank: 5, team: 'KIA', games: 105, win: 51, loss: 50, draw: 4, pct: 0.505, gamesBehind: 11.5, lastTen: '5승1무4패', streak: '1승' },
+    { rank: 6, team: 'KT', games: 111, win: 54, loss: 53, draw: 4, pct: 0.505, gamesBehind: 11.5, lastTen: '4승1무5패', streak: '1패' },
+    { rank: 7, team: 'NC', games: 104, win: 49, loss: 49, draw: 6, pct: 0.500, gamesBehind: 12, lastTen: '5승1무4패', streak: '3승' },
+    { rank: 8, team: '삼성', games: 108, win: 51, loss: 56, draw: 1, pct: 0.477, gamesBehind: 14.5, lastTen: '3승0무7패', streak: '3패' },
+    { rank: 9, team: '두산', games: 109, win: 45, loss: 59, draw: 5, pct: 0.433, gamesBehind: 19, lastTen: '4승0무6패', streak: '2패' },
+    { rank: 10, team: '키움', games: 111, win: 33, loss: 74, draw: 4, pct: 0.308, gamesBehind: 32.5, lastTen: '5승0무5패', streak: '1패' }
+];
+
+// 시범 경기 순위 (임시 목업 데이터)
+const exhibitionData = [
+    { rank: 1, team: '두산', games: 10, win: 8, loss: 2, draw: 0, pct: 0.800, gamesBehind: 0, lastTen: '8-2-0', streak: '5승' },
+    { rank: 2, team: 'LG', games: 10, win: 7, loss: 3, draw: 0, pct: 0.700, gamesBehind: 1.0, lastTen: '7-3-0', streak: '3승' },
+    { rank: 3, team: 'KIA', games: 10, win: 6, loss: 3, draw: 1, pct: 0.667, gamesBehind: 1.5, lastTen: '6-3-1', streak: '1승' },
+    { rank: 4, team: '삼성', games: 10, win: 6, loss: 4, draw: 0, pct: 0.600, gamesBehind: 2.0, lastTen: '6-4-0', streak: '2패' },
+    { rank: 5, team: 'SSG', games: 10, win: 5, loss: 4, draw: 1, pct: 0.556, gamesBehind: 2.5, lastTen: '5-4-1', streak: '1패' },
+    { rank: 6, team: 'NC', games: 10, win: 5, loss: 5, draw: 0, pct: 0.500, gamesBehind: 3.0, lastTen: '5-5-0', streak: '1승' },
+    { rank: 7, team: '한화', games: 10, win: 4, loss: 5, draw: 1, pct: 0.444, gamesBehind: 3.5, lastTen: '4-5-1', streak: '2패' },
+    { rank: 8, team: 'KT', games: 10, win: 4, loss: 6, draw: 0, pct: 0.400, gamesBehind: 4.0, lastTen: '4-6-0', streak: '1패' },
+    { rank: 9, team: '롯데', games: 10, win: 2, loss: 7, draw: 1, pct: 0.222, gamesBehind: 5.5, lastTen: '2-7-1', streak: '4패' },
+    { rank: 10, team: '키움', games: 10, win: 1, loss: 8, draw: 1, pct: 0.111, gamesBehind: 6.5, lastTen: '1-8-1', streak: '6패' }
+];
+
+function displayStandings(standingsData) {
     const container = document.getElementById('standingsContainer');
     if (!container) return;
-
-    const standingsData = [
-        { rank: 1, team: 'LG', games: 110, win: 66, loss: 42, draw: 2, pct: 0.611, gamesBehind: 0, lastTen: '8승0무2패', streak: '1승' },
-        { rank: 2, team: '한화', games: 107, win: 62, loss: 42, draw: 3, pct: 0.596, gamesBehind: 2, lastTen: '5승0무5패', streak: '2승' },
-        { rank: 3, team: '롯데', games: 110, win: 58, loss: 49, draw: 3, pct: 0.542, gamesBehind: 7.5, lastTen: '4승0무6패', streak: '4패' },
-        { rank: 4, team: 'SSG', games: 107, win: 54, loss: 49, draw: 4, pct: 0.524, gamesBehind: 9.5, lastTen: '7승0무3패', streak: '3승' },
-        { rank: 5, team: 'KIA', games: 105, win: 51, loss: 50, draw: 4, pct: 0.505, gamesBehind: 11.5, lastTen: '5승1무4패', streak: '1승' },
-        { rank: 6, team: 'KT', games: 111, win: 54, loss: 53, draw: 4, pct: 0.505, gamesBehind: 11.5, lastTen: '4승1무5패', streak: '1패' },
-        { rank: 7, team: 'NC', games: 104, win: 49, loss: 49, draw: 6, pct: 0.500, gamesBehind: 12, lastTen: '5승1무4패', streak: '3승' },
-        { rank: 8, team: '삼성', games: 108, win: 51, loss: 56, draw: 1, pct: 0.477, gamesBehind: 14.5, lastTen: '3승0무7패', streak: '3패' },
-        { rank: 9, team: '두산', games: 109, win: 45, loss: 59, draw: 5, pct: 0.433, gamesBehind: 19, lastTen: '4승0무6패', streak: '2패' },
-        { rank: 10, team: '키움', games: 111, win: 33, loss: 74, draw: 4, pct: 0.308, gamesBehind: 32.5, lastTen: '5승0무5패', streak: '1패' }
-    ];
 
     const table = document.createElement('table');
     table.className = 'standings-table';
@@ -42,16 +59,42 @@ function displayStandings() {
     standingsData.forEach(team => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${team.rank}</td><td>${team.team}</td><td>${team.games}</td>
-            <td>${team.win}</td><td>${team.loss}</td><td>${team.draw}</td>
-            <td>${team.pct.toFixed(3)}</td><td>${team.gamesBehind}</td>
-            <td>${team.lastTen}</td><td>${team.streak}</td>
+            <td>${team.rank}</td>
+            <td class="team-name">${team.team}</td>
+            <td>${team.games}</td>
+            <td>${team.win}</td>
+            <td>${team.loss}</td>
+            <td>${team.draw}</td>
+            <td>${team.pct.toFixed(3)}</td>
+            <td>${team.gamesBehind}</td>
+            <td>${team.lastTen}</td>
+            <td>${team.streak}</td>
         `;
         tbody.appendChild(row);
     });
     table.appendChild(tbody);
     container.innerHTML = '';
     container.appendChild(table);
+}
+
+function initializeStandings() {
+    const seasonSelector = document.querySelector('.season-selector .form-select');
+    if (!seasonSelector) {
+        displayStandings(regularSeasonData);
+        return;
+    }
+
+    displayStandings(regularSeasonData);
+
+    seasonSelector.addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        if (selectedValue === '시범경기') {
+            // TODO: KBO 사이트에서 실제 시범경기 데이터를 가져오는 로직으로 대체해야 합니다.
+            displayStandings(exhibitionData);
+        } else {
+            displayStandings(regularSeasonData);
+        }
+    });
 }
 
 // --- 개인 기록 섹션 로직 ---
