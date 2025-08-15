@@ -1,0 +1,91 @@
+/* --- 기본 스타일 --- */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #f8f9fa; /* 기본 배경색 */
+    color: #212529; /* 기본 텍스트 색상 */
+}
+
+/* --- 용어 사전 페이지 전용 배경 --- */
+body.dictionary-background {
+    color: #ffffff; /* 텍스트 색상 흰색으로 */
+    position: relative;
+}
+
+body.dictionary-background::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.namu.wiki/i/rz138i6CeWO4-3JKUJ7glQpWRSk0P7JTbC6KaRmmBItim1yXaXnVgBlIyI03tlN5SxZ3kalOK9SfXaEtV2MDzg.svg') no-repeat center center;
+    background-size: contain;
+    background-color: #2a2a2e; /* 로고 이미지 배경색 */
+    z-index: -1;
+}
+
+/* --- 네비게이션 바 --- */
+.navbar.bg-dark {
+    background-color: #002856 !important; /* KBO 네이비 색상 */
+    border-bottom: 3px solid #d4002c; /* 야구공 실밥 빨간색 */
+}
+
+/* --- 용어 사전 페이지 스타일 --- */
+.floating-sidebar {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 100px;
+    z-index: 100;
+}
+
+.floating-sidebar .nav-link {
+    color: #ffffff; /* 흰색으로 변경 */
+    font-weight: bold;
+    text-shadow: none; /* 텍스트 그림자 제거 */
+}
+
+.floating-sidebar .nav-link.active {
+    color: #d4002c;
+    transform: scale(1.1);
+}
+
+.main-content {
+    padding-left: 140px;
+}
+
+.dictionary-content section {
+    padding-top: 56px;
+    margin-top: -56px;
+}
+
+.dictionary-content h1, .dictionary-content h2 {
+    color: #ffffff; /* 흰색으로 변경 */
+    font-weight: bold;
+    border-bottom: 2px solid #d4002c;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.dictionary-content dl {
+    background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dictionary-content dt {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #333;
+    margin-top: 15px;
+    border-left: 5px solid #d4002c;
+    padding-left: 10px;
+}
+
+.dictionary-content dd {
+    margin-left: 15px;
+    margin-bottom: 10px;
+    color: #555;
+    padding-top: 5px;
+}
