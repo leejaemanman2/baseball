@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KBO 리그 구단 소개</title>
+
+    <!-- 부트스트랩 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+    <!-- (기존) 외부 CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- ▼▼ 커스텀 CSS ▼▼ -->
+    <style>
+        /* 상단 고정 버튼 영역 여백 확보 */
+        body {
+            padding-top: 88px;
+        }
+
+        /* === 상단 우측 바로가기 버튼 묶음 (게시판 + 용어 사전) === */
+        .top-actions {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            z-index: 1200;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .top-actions a {
+            display: block;
+            height: 120px;
+            /* PC 기본 크기 */
+            width: auto;
+        }
+
+        .top-actions img {
+            height: 100%;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            background: #fff;
+            padding: 6px 8px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .top-actions a:hover img,
+        .top-actions a:focus-visible img {
+            transform: scale(1.04);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .16);
+        }
+
+        @media (max-width: 768px) {
+            .top-actions a {
+                height: 44px;
+            }
+
+            /* 모바일 축소 */
+        }
+
+        /* === 3-UP 로고 슬라이더 === */
+        .logo-viewport {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-track {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex: 1;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .logo-card {
+            display: none;
+            /* 기본 감춤, JS로 3장만 노출 */
+            flex: 0 0 auto;
+            transition: transform .25s ease, opacity .25s ease, filter .25s ease;
+        }
+
+        .logo-card a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 200px;
+            padding: 16px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+        }
+
+        .logo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* 로고 비율 유지 */
+        }
+
+        /* 중앙 1장 + 양옆 2장 노출 */
+        .logo-card.is-left,
+        .logo-card.is-center,
+        .logo-card.is-right {
+            display: block;
+        }
+
+        .logo-card.is-center {
+            flex-basis: 44%;
+            transform: scale(1.12);
+            opacity: 1;
+            filter: none;
+            z-index: 1;
+        }
+
+        .logo-card.is-left,
+        .logo-card.is-right {
+            flex-basis: 28%;
+            transform: scale(0.95);
+            opacity: 0.9;
+            filter: grayscale(8%);
+        }
+
+        /* 네비게이션 버튼 */
+        .nav-btn {
+            border: 0;
+            background: transparent;
+            font-size: 2.4rem;
+            line-height: 1;
+            cursor: pointer;
+            user-select: none;
+            padding: .25rem .5rem;
+        }
+
+        .nav-btn:focus-visible {
+            outline: 2px solid #333;
+            outline-offset: 2px;
+        }
+
+        /* 반응형 보정 */
+        @media (max-width: 1200px) {
+            .logo-card.is-center {
+                flex-basis: 52%;
+            }
+
+            .logo-card.is-left,
+            .logo-card.is-right {
+                flex-basis: 22%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-card a {
+                height: 160px;
+            }
+        }
+
+        /* <<<<<<< HEAD */
+
+        /* ▼▼ 콘텐츠 카드 스타일 ▼▼ */
+        .content-card {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            height: 100%;
+        }
+
+        .champion-section .champion-image {
+            width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .highlight-section-new .video-list-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-height: 480px;
+            /* 스크롤 생성을 위한 높이 제한 */
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .highlight-section-new .video-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .highlight-section-new .video-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: transform .2s ease;
+        }
+
+        .highlight-section-new .video-card a:hover img {
+            transform: scale(1.03);
+        }
+
+        .highlight-section-new .video-card .video-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* 스크롤바 스타일 */
+        .video-list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .video-list-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .video-list-container::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .video-list-container::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        /* ▲▲ 콘텐츠 카드 스타일 끝 ▲▲ */
+
+        /* ▼▼ 순위 섹션 스타일 ▼▼ */
+        .standings-section-new {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+        }
+
+        .standings-section-new .tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .standings-section-new .tabs .tab {
+            padding: 0 4px 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #888;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+        }
+
+        .standings-section-new .tabs .tab.active,
+        .standings-section-new .tabs .tab:hover {
+            color: #000;
+            border-bottom-color: #0d6efd;
+        }
+
+        .standings-section-new .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .standings-section-new .date-selector {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .standings-section-new .season-selector .form-select {
+            width: auto;
+            min-width: 120px;
+        }
+
+        .standings-table {
+            width: 100%;
+            margin-top: 16px;
+            font-size: 0.95rem;
+        }
+
+        .standings-table th,
+        .standings-table td {
+            text-align: center;
+            padding: 12px 8px;
+            vertical-align: middle;
+        }
+
+        .standings-table thead {
+            background-color: #f8f9fa;
+        }
+
+        .standings-table th {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .standings-table tbody tr:nth-child(odd) {
+            background-color: #fcfcfc;
+        }
+
+        .standings-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .standings-table .team-name {
+            text-align: left;
+            font-weight: 500;
+        }
+
+        /* ▲▲ 순위 섹션 스타일 끝 ▲▲ */
+        /* =======>>>>>>>562a5dbee3dfa50f09232dddb08328b469c77b57 */
+    </style>
+    <!-- ▲▲ 커스텀 CSS 끝 ▲▲ -->
+</head>
+
+<body>
+    <!-- 상단 우측: 게시판 + 용어 사전 버튼 (가로 정렬) -->
+    <nav class="top-actions" aria-label="빠른 이동">
+        <a href="board.html" aria-label="게시판으로 이동" title="게시판">
+            <img src="https://cdn.mediaus.co.kr/news/photo/201301/31170_66251_5040.jpg" alt="게시판">
+        </a>
+        <a href="dictionary.html" aria-label="용어 사전으로 이동" title="용어 사전">
+            <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/KBOHome/resources/images/common/open_graph_kbo_2022.png"
+                alt="용어 사전">
+        </a>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">KBO 리그 구단</h1>
+
+        <!-- ▼▼ 3-UP 로고 슬라이더 ▼▼ -->
+        <div class="logo-viewport" id="teamLogoStrip" tabindex="0" aria-label="구단 로고 슬라이더">
+            <button class="nav-btn left" id="logoPrev" aria-label="이전">‹</button>
+
+            <ul class="logo-track" id="logoTrack">
+                <li class="logo-card" data-active="true">
+                    <a href="Lg.html" title="LG 트윈스">
+                        <img src="https://i.namu.wiki/i/hO1tKtbzTmk6ejSnIe75x6s0M7GKFvWwu4ZLhA2TOIGrgdRyAWeKqkdz4xU-RVRUzcB9dJZqjAFdNkQJ4FnjpxFcUKQ5wt0ZMo44tCQkElrlhsW-_-lJA4yOf7V1tQplvMzaeE0H48bpY6yupRXqBA.svg"
+                            alt="LG 트윈스" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Hanwha.html" title="한화 이글스">
+                        <img src="https://i.namu.wiki/i/HkRejTGyCUSzZrpzmYCgmiPDTh7MJkNx6yHdRTg0YFLbCtn0UeSuwKRzt2RjEx9fIAXvs1uaA-OPhcmYHNBwSQ.svg"
+                            alt="한화 이글스" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Lotte.html" title="롯데 자이언츠">
+                        <img src="https://i.namu.wiki/i/lU8g13gkhLRPTg-tZvUZR6HhBRJZeOO8YvqBTyDidl9NUOJQtm8ClHHMTh3_Y7IXW04W8T4Yq9ApPojdfuKuBEqrq7atBKJf31okno-vu-wpumV1MNfEvWuJOjvGwMGe2otTdDXhlwJPMirSYdckZw.svg"
+                            alt="롯데 자이언츠" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="SSG.html" title="SSG 랜더스">
+                        <img src="https://i.namu.wiki/i/UiBOi4yJvRcka0FWdwkUFTDp19LrJbXxG9KmPTn3c6dbOPVtVtMPjNH5pUGL0Im3RMsFx7J0eHpw9JU4hWhZHi9CQIqUDwvqFTfyl6QibjbOLGl2y7KzTddK0Ogjym91devfObhzoquDOsbax7w8nQ.svg"
+                            alt="SSG 랜더스" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Kia.html" title="KIA 타이거즈">
+                        <img src="https://i.namu.wiki/i/hO1tKtbzTmk6ejSnIe75x6s0M7GKFvWwu4ZLhA2TOIGrgdRyAWeKqkdz4xU-RVRUzcB9dJZqjAFdNkQJ4FnjpxFcUKQ5wt0ZMo44tCQkElrlhsW-_-lJA4yOf7V1tQplvMzaeE0H48bpY6yupRXqBA.svg"
+                            alt="KIA 타이거즈" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="KT.html" title="KT 위즈">
+                        <img src="https://i.namu.wiki/i/iWE0VYG-cUydLqJL4Ux4ukiNV93Ggw-pFUne0aUlneWp6sxoR_E_6TAgTwS70gLLOmMwMobFrCaLfsTvNTEi0w.svg"
+                            alt="KT 위즈" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="NC.html" title="NC 다이노스">
+                        <img src="https://i.namu.wiki/i/Pe28ATeB6Rd8_JZ2UuKRcY6egdi5u1JHoOrDborXaKrliyzRbScxBSetL_joHq4em5j-O4im5T8R-Pz5RiigQHLc6s1OPrJujJHyfSFeg-f-jXQgX9SnGcZ-eiIqGevlmNT22fWy3ou2fwDpfXfIPQ.svg"
+                            alt="NC 다이노스" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Lions.html" title="삼성 라이온즈">
+                        <img src="https://i.namu.wiki/i/yipAySTOcYfS5knYyFohg-XN6gdHwvBAVXeGgn1auuqZVgvQpveM7v_EnIz0DSWznxfvTLotB04tGUsFQVicF7Lq015Ix0l-65Sv2mnLzIp-n_VQrOi6r3UfpbsQVpiPs3vRoYPE7LCz0fy7RJ7jpw.svg"
+                            alt="삼성 라이온즈" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Doosan.html" title="두산 베어스">
+                        <img src="https://i.namu.wiki/i/EHrb4HpxUiFN8OkDVrTAb2z9nC_-vUj2KlgWfduS76BkNzlTEYWLy_-Yj9Pwkpuyv3sQqTZZXER5SWJbNE-rhyR2BwYygdLGl01p3D7Psu2AKOhv5Ule2qRnWTv3huyvjcX7ZbNblbvDjwmM4BTq6w.svg"
+                            alt="두산 베어스" />
+                    </a>
+                </li>
+                <li class="logo-card">
+                    <a href="Kiwoom.html" title="키움 히어로즈">
+                        <img src="https://i.namu.wiki/i/ZlB0IEFdKgSEsYEfHEqiwNzOnaxG6dQzbc5pHM7RzKWCzBbB6AdyWeB_GDV3FCf7jAzju0b-vWO6mF_Fk6gyfDTAHvBnxXY0Qtk-8DN64wLB__pFX45PaUwwjsGQ9g1zXby4NnTR5Y7eNs6TQf1gsA.svg"
+                            alt="키움 히어로즈" />
+                    </a>
+                </li>
+            </ul>
+
+            <button class="nav-btn right" id="logoNext" aria-label="다음">›</button>
+        </div>
+        <!-- ▲▲ 3-UP 로고 슬라이더 끝 ▲▲ -->
+
+        <!-- 아래 섹션들은 기존 코드 유지 -->
+        <div class="row mt-5">
+            <!-- 왼쪽: 챔피언 정보 -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="content-card champion-section">
+                    <h2 class="text-center mb-4">2024 우승: KIA 타이거즈</h2>
+                    <img src="https://tigers.co.kr/files/photo/2024/10/image_67203a800ed3b1.055150590.jpg"
+                        class="champion-image" alt="KIA 타이거즈 우승">
+                </div>
+            </div>
+
+            <!-- 오른쪽: 이주의 명장면 -->
+            <div class="col-lg-6">
+                <div class="content-card highlight-section-new">
+                    <h2 class="text-center mb-4">이주의 명장면</h2>
+                    <div class="video-list-container">
+                        <div class="video-card">
+                            <a href="https://www.koreabaseball.com/MediaNews/Highlight/View.aspx?leagueId=1&seriesId=0&gameId=20250812HTSS0&boardSe=24332"
+                                target="_blank">
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/vod%2fimages%2f2025%2f8%2f20250812HTSS0.jpg"
+                                    alt="KIA VS 삼성">
+                                <div class="video-title">KIA VS 삼성</div>
+                            </a>
+                        </div>
+                        <div class="video-card">
+                            <a href="https://www.koreabaseball.com/MediaNews/Highlight/View.aspx?leagueId=1&seriesId=0&gameId=20250812LGKT0&boardSe=24333"
+                                target="_blank">
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/vod%2fimages%2f2025%2f8%2f20250812LGKT0.jpg"
+                                    alt="LG VS KT">
+                                <div class="video-title">LG VS KT</div>
+                            </a>
+                        </div>
+                        <div class="video-card">
+                            <a href="https://www.koreabaseball.com/MediaNews/Highlight/View.aspx?leagueId=1&seriesId=0&gameId=20250812LTHH0&boardSe=24330"
+                                target="_blank">
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/vod%2fimages%2f2025%2f8%2f20250812LTHH0.jpg"
+                                    alt="롯데 VS 한화">
+                                <div class="video-title">롯데 VS 한화</div>
+                            </a>
+                        </div>
+                        <div class="video-card">
+                            <a href="https://www.koreabaseball.com/MediaNews/Highlight/View.aspx?leagueId=1&seriesId=0&gameId=20250812NCOB0&boardSe=24331"
+                                target="_blank">
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/vod%2fimages%2f2025%2f8%2f20250812NCOB0.jpg"
+                                    alt="NC VS 두산">
+                                <div class="video-title">NC VS 두산</div>
+                            </a>
+                        </div>
+                        <div class="video-card">
+                            <a href="https://www.koreabaseball.com/MediaNews/Highlight/View.aspx?leagueId=1&seriesId=0&gameId=20250812WOSK0&boardSe=24329"
+                                target="_blank">
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_FILE/vod%2fimages%2f2025%2f8%2f20250812WOSK0.jpg"
+                                    alt="키움 VS SSG">
+                                <div class="video-title">키움 VS SSG</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- row -->
+
+        <div class="row mt-5">
+            <!-- 왼쪽: 순위 보기 섹션 -->
+            <div class="col-lg-8">
+                <div class="standings-section-new">
+                    <div class="tabs">
+                        <div class="tab active" id="rankTab">팀 순위</div>
+                        <a href="https://www.koreabaseball.com/Record/TeamRank/GraphDaily.aspx" target="_blank"
+                            class="tab">팀별 순위변동 그래프</a>
+                    </div>
+                    <div class="controls">
+                        <div class="date-selector">
+                            <span class="me-2">
+                            </span>
+                            <span>2025.08.12</span>
+                            <span class="ms-2"></span>
+                        </div>
+                        <div class="season-selector">
+                            <select class="form-select">
+                                <option selected>정규시즌</option>
+                                <option>시범경기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="standingsContainer" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- 오른쪽: 개인 기록 섹션 -->
+            <div class="col-lg-4">
+                <div class="player-records-section">
+                    <h4 class="text-center mb-3">개인 기록</h4>
+                    <select id="recordCategory" class="form-select mb-3">
+                        <option value="avg">타율</option>
+                        <option value="hr">홈런</option>
+                        <option value="rbi">타점</option>
+                        <option value="era">평균자책점</option>
+                        <option value="win">승리</option>
+                        <option value="save">세이브</option>
+                    </select>
+                    <div id="playerRecordsContainer"></div>
+
+                    <div class="weekly-ranking-section mt-4">
+                        <h5 class="text-center">주간 랭킹 (8월 2주차)</h5>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <h6>타자</h6>
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/kbo/2025/65109.png"
+                                    alt="주간 타자 1위: 백승현" class="ranking-img">
+                                <div class="ranking-name">백승현 (LG)</div>
+                                <div class="ranking-record">AVG 0.00</div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <h6>투수</h6>
+                                <img src="https://6ptotvmi5753.edge.naverncp.com/KBO_IMAGE/person/kbo/2025/55730.png"
+                                    alt="주간 투수 1위: 폰세" class="ranking-img">
+                                <div class="ranking-name">폰세 (한화)</div>
+                                <div class="ranking-record">ERA 0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- col -->
+        </div> <!-- row -->
+    </div> <!-- container -->
+
+    <!-- 부트스트랩 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- (기존) 외부 JS -->
+    <script src="js/app.js" defer></script>
+
+    <!-- ▼▼ 3-UP 로고 슬라이더 전용 JS ▼▼ -->
+    <script>
+        // === 3-UP 로고 슬라이더 컨트롤 ===
+        (() => {
+            const track = document.getElementById('logoTrack');
+            if (!track) return;
+
+            const cards = Array.from(track.querySelectorAll('.logo-card'));
+            const prevBtn = document.getElementById('logoPrev');
+            const nextBtn = document.getElementById('logoNext');
+            const viewport = document.getElementById('teamLogoStrip');
+
+            // 시작 인덱스: data-active="true" 우선, 없으면 0
+            let cur = Math.max(0, cards.findIndex(c => c.dataset.active === 'true'));
+            if (cur < 0) cur = 0;
+
+            const paint = () => {
+                cards.forEach(c => c.classList.remove('is-left', 'is-center', 'is-right'));
+                const left = (cur - 1 + cards.length) % cards.length;
+                const right = (cur + 1) % cards.length;
+
+                // 모두 숨기고 3장만 표시
+                cards.forEach(c => { c.style.display = 'none'; });
+                [left, cur, right].forEach((idx, i) => {
+                    const cls = i === 0 ? 'is-left' : i === 1 ? 'is-center' : 'is-right';
+                    const el = cards[idx];
+                    el.style.display = '';
+                    el.classList.add(cls);
+                });
+            };
+
+            const goPrev = () => { cur = (cur - 1 + cards.length) % cards.length; paint(); };
+            const goNext = () => { cur = (cur + 1) % cards.length; paint(); };
+
+            prevBtn.addEventListener('click', goPrev);
+            nextBtn.addEventListener('click', goNext);
+
+            // 키보드(좌/우 화살표) 지원
+            viewport.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+            });
+
+            paint();
+        })();
+    </script>
+    <!-- ▲▲ 3-UP 로고 슬라이더 전용 JS 끝 ▲▲ -->
+</body>
+
+</html>
