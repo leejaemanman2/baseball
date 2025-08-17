@@ -217,9 +217,12 @@ function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
 
+    // ▼▼▼ 실시간 필터링의 핵심 1: 'keyup' 이벤트 ▼▼▼
+    // 검색창에 키보드를 입력했다가 뗄 때마다 안의 코드가 실행됩니다.
     searchInput.addEventListener('keyup', () => {
+        // 검색어를 대문자로 변환 (대소문자 구분 없이 검색하기 위함)
         const filter = searchInput.value.toUpperCase();
-        const sections = document.querySelectorAll('.dictionary-content section');
+        const sections = document.querySelectorAll('.dictionary-content section'); // querySelectorAll dt 태그 목록 가져옴
 
         sections.forEach(section => {
             const terms = section.querySelectorAll('dl > dt');
@@ -229,10 +232,14 @@ function initializeSearch() {
                 const termText = term.textContent || term.innerText;
                 const definition = term.nextElementSibling;
 
+                // ▼▼▼ 실시간 필터링의 핵심 2: 'indexOf'를 이용한 비교 ▼▼▼
+                // 용어(termText) 안에 검색어(filter)가 포함되어 있는지 확인합니다.
                 if (termText.toUpperCase().indexOf(filter) > -1) {
+                    // 포함되어 있으면 용어와 설명을 화면에 보여줍니다.
                     term.style.display = "";
                     definition.style.display = "";
                     sectionHasVisibleTerm = true;
+                     // 포함되어 있지 않으면 숨깁니다.
                 } else {
                     term.style.display = "none";
                     definition.style.display = "none";
